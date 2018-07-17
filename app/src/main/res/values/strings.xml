@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Garnish</string>
+    <string name="splash_image">Splash Image</string>
 </resources>
