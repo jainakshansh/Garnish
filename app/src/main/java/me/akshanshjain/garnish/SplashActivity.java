@@ -36,6 +36,7 @@ public class SplashActivity extends AppCompatActivity {
         appName.clearAnimation();
         appName.startAnimation(fadeIn);
 
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
