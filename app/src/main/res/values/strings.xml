@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Garnish</string>
     <string name="splash_image">Splash Image</string>
+    <string name="cooking_time">Cooking Time</string>
+    <string name="total_servings">Total Servings</string>
+    <string name="recipe_image">Recipe Image</string>
 </resources>

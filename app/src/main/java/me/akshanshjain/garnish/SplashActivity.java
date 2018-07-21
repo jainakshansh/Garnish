@@ -36,7 +36,7 @@ public class SplashActivity extends AppCompatActivity {
         appName.clearAnimation();
         appName.startAnimation(fadeIn);
 
-
+        //Ending the splash screen after a delay of 3 seconds. Onto Landing page.
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
