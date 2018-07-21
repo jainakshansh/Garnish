@@ -9,12 +9,21 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.List;
+
+import me.akshanshjain.garnish.Objects.IngredientItem;
+import me.akshanshjain.garnish.Objects.RecipeItem;
+import me.akshanshjain.garnish.Objects.StepsItem;
+
 public class LandingActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
 
     private RecyclerView recipeRecycler;
 
+    private List<RecipeItem> recipeItemList;
+    private List<IngredientItem> ingredientItemList;
+    private List<StepsItem> stepsItemList;
     private static final String BASE_URL = "https://d17h27t6h515a5.cloudfront.net/topher/2017/May/59121517_baking/baking.json";
 
     //String constants for the Recipe JSON parsing.
@@ -63,9 +72,9 @@ public class LandingActivity extends AppCompatActivity {
                 JSONObject recipeObject = baseJSONResponse.getJSONObject(i);
 
                 //Extracting relevant information from the object.
-                String recipeID = recipeObject.getString(RECIPE_ID);
+                int recipeID = recipeObject.getInt(RECIPE_ID);
                 String recipeName = recipeObject.getString(RECIPE_NAME);
-                String recipeServings = recipeObject.getString(RECIPE_SERVINGS);
+                int servings = recipeObject.getInt(RECIPE_SERVINGS);
                 String recipeImage = recipeObject.getString(RECIPE_IMAGE);
 
 
@@ -78,9 +87,12 @@ public class LandingActivity extends AppCompatActivity {
                     JSONObject ingredientObject = ingredientsArray.getJSONObject(c);
 
                     //Extracting relevant information from the object.
-                    String quantity = ingredientObject.getString(INGREDIENTS_QUANTITY);
+                    int quantity = ingredientObject.getInt(INGREDIENTS_QUANTITY);
                     String measure = ingredientObject.getString(INGREDIENTS_MEASURE);
                     String ingredient = ingredientObject.getString(INGREDIENTS_INGREDIENT);
+
+                    //Adding all the ingredient elements to an array list.
+                    ingredientItemList.add(new IngredientItem(quantity, measure, ingredient));
                 }
 
 
@@ -93,12 +105,18 @@ public class LandingActivity extends AppCompatActivity {
                     JSONObject stepObject = stepsArray.getJSONObject(c);
 
                     //Extracting relevant information from the object.
-                    String id = stepObject.getString(STEPS_ID);
+                    int id = stepObject.getInt(STEPS_ID);
                     String shortDesc = stepObject.getString(STEPS_SHORT_DESC);
                     String description = stepObject.getString(STEPS_DESC);
                     String videoURL = stepObject.getString(STEPS_VIDEO_URL);
                     String thumbnailURL = stepObject.getString(STEPS_THUMBNAIL_URL);
+
+                    //Adding all the step elements to an array list.
+                    stepsItemList.add(new StepsItem(id, shortDesc, description, videoURL, thumbnailURL));
                 }
+
+                //Adding all the recipe elements to an array list.
+                recipeItemList.add(new RecipeItem(recipeID, recipeName, ingredientItemList, stepsItemList, servings, recipeImage));
             }
         } catch (JSONException e) {
             e.printStackTrace();

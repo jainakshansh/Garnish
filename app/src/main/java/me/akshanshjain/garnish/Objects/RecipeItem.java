@@ -1,22 +1,24 @@
 package me.akshanshjain.garnish.Objects;
 
+import java.util.List;
+
 public class RecipeItem {
 
     private int id;
     private String name;
-    private IngredientItem ingredients;
-    private StepsItem recipeSteps;
+    private List<IngredientItem> ingredientItemList;
+    private List<StepsItem> stepsItemList;
     private int servings;
     private String imageUrl;
 
     private RecipeItem() {
     }
 
-    public RecipeItem(int id, String name, IngredientItem ingredients, StepsItem recipeSteps, int servings, String imageUrl) {
+    public RecipeItem(int id, String name, List<IngredientItem> ingredientItemList, List<StepsItem> stepsItemList, int servings, String imageUrl) {
         this.id = id;
         this.name = name;
-        this.ingredients = ingredients;
-        this.recipeSteps = recipeSteps;
+        this.ingredientItemList = ingredientItemList;
+        this.stepsItemList = stepsItemList;
         this.servings = servings;
         this.imageUrl = imageUrl;
     }
@@ -29,12 +31,12 @@ public class RecipeItem {
         return name;
     }
 
-    public IngredientItem getIngredients() {
-        return ingredients;
+    public List<IngredientItem> getIngredientItemList() {
+        return ingredientItemList;
     }
 
-    public StepsItem getRecipeSteps() {
-        return recipeSteps;
+    public List<StepsItem> getStepsItemList() {
+        return stepsItemList;
     }
 
     public int getServings() {
