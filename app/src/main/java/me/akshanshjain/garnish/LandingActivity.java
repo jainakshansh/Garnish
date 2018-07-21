@@ -1,9 +1,15 @@
 package me.akshanshjain.garnish;
 
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -78,10 +84,17 @@ public class LandingActivity extends AppCompatActivity {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(LandingActivity.this, "Please check your internet connection.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LandingActivity.this, getResources().getString(R.string.check_internet_connection), Toast.LENGTH_SHORT).show();
             }
         });
-        requestQueue.add(request);
+
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        if (networkInfo != null) {
+            requestQueue.add(request);
+        }
+
+        Log.d("ADebug", "End of on create");
     }
 
     /*
@@ -94,6 +107,13 @@ public class LandingActivity extends AppCompatActivity {
 
         ingredientItemList = new ArrayList<>();
         stepsItemList = new ArrayList<>();
+
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        recipeRecycler.setLayoutManager(layoutManager);
+        recipeRecycler.setItemAnimator(new DefaultItemAnimator());
+        recipeRecycler.setAdapter(recipeAdapter);
+
+        Log.d("ADebug", "End of initViews");
     }
 
     /*
@@ -154,10 +174,20 @@ public class LandingActivity extends AppCompatActivity {
                 }
 
                 //Adding all the recipe elements to an array list.
-                recipeItemList.add(new RecipeItem(recipeID, recipeName, ingredientItemList, stepsItemList, servings, recipeImage));
+                recipeItemList.add(new RecipeItem(recipeID, recipeName, ingredientItemList, stepsItemList, servings, recipeImage, null));
             }
         } catch (JSONException e) {
             e.printStackTrace();
+        }
+
+        Log.d("ADebug", "End of extraction");
+    }
+
+    private void additionalDetails(int index) {
+        String cookingTime = "";
+        switch (index) {
+            case 0:
+                cookingTime = "";
         }
     }
 }

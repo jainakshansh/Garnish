@@ -11,12 +11,11 @@ public class RecipeItem {
     private int servings;
     private String imageUrl;
     private String cookingTime;
-    private String description;
 
     private RecipeItem() {
     }
 
-    public RecipeItem(int id, String name, List<IngredientItem> ingredientItemList, List<StepsItem> stepsItemList, int servings, String imageUrl, String cookingTime, String description) {
+    public RecipeItem(int id, String name, List<IngredientItem> ingredientItemList, List<StepsItem> stepsItemList, int servings, String imageUrl, String cookingTime) {
         this.id = id;
         this.name = name;
         this.ingredientItemList = ingredientItemList;
@@ -24,7 +23,6 @@ public class RecipeItem {
         this.servings = servings;
         this.imageUrl = imageUrl;
         this.cookingTime = cookingTime;
-        this.description = description;
     }
 
     public int getId() {
@@ -53,9 +51,5 @@ public class RecipeItem {
 
     public String getCookingTime() {
         return cookingTime;
-    }
-
-    public String getDescription() {
-        return description;
     }
 }

@@ -34,14 +34,13 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     public class RecipeViewHolder extends RecyclerView.ViewHolder {
 
         private ImageView recipeImage;
-        private TextView recipeName, recipeDesc;
+        private TextView recipeName;
         private TextView recipeTime, recipeServings;
 
         public RecipeViewHolder(View view) {
             super(view);
             recipeImage = view.findViewById(R.id.recipe_image);
             recipeName = view.findViewById(R.id.recipe_name);
-            recipeDesc = view.findViewById(R.id.recipe_desc);
             recipeTime = view.findViewById(R.id.recipe_time);
             recipeServings = view.findViewById(R.id.recipe_servings);
         }
@@ -64,9 +63,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
 
         holder.recipeName.setTypeface(greatVibes);
         holder.recipeName.setText(recipeItem.getName());
-
-        holder.recipeDesc.setTypeface(qMed);
-        holder.recipeDesc.setText(recipeItem.getDescription());
 
         holder.recipeTime.setTypeface(qBold);
         holder.recipeTime.setText(recipeItem.getCookingTime());
