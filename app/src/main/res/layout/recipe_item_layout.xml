@@ -10,9 +10,7 @@
     <ImageView
         android:id="@+id/recipe_image"
         android:layout_width="match_parent"
-        android:layout_height="384dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
+        android:layout_height="276dp"
         android:contentDescription="@string/recipe_image"
         android:scaleType="centerCrop"
         tools:src="@drawable/nutella_pie" />
@@ -25,7 +23,7 @@
         android:gravity="center"
         android:letterSpacing="0.1"
         android:textColor="@android:color/black"
-        android:textSize="24sp"
+        android:textSize="30sp"
         tools:text="Nutella Pie" />
 
     <LinearLayout
@@ -39,19 +37,21 @@
 
         <ImageView
             android:layout_width="0dp"
-            android:layout_height="48dp"
+            android:layout_height="36dp"
             android:layout_weight="1"
             android:contentDescription="@string/cooking_time"
             android:src="@drawable/cooking_time" />
 
         <ImageView
             android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:layout_weight="1" />
+            android:layout_height="36dp"
+            android:layout_weight="1"
+            android:contentDescription="@string/ingredients"
+            android:src="@drawable/ingredients" />
 
         <ImageView
             android:layout_width="0dp"
-            android:layout_height="48dp"
+            android:layout_height="36dp"
             android:layout_weight="1"
             android:contentDescription="@string/total_servings"
             android:src="@drawable/servings" />

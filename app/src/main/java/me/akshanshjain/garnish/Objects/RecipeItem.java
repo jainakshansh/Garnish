@@ -6,8 +6,8 @@ public class RecipeItem {
 
     private int id;
     private String name;
-    private List<IngredientItem> ingredientItemList;
-    private List<StepsItem> stepsItemList;
+    private List<IngredientItem> ingredientItemList = null;
+    private List<StepsItem> stepsItemList = null;
     private int servings;
     private String imageUrl;
     private String cookingTime;

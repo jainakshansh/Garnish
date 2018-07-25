@@ -21,13 +21,12 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
 
     private Context context;
     private List<RecipeItem> recipeItemList;
-    private Typeface qMed, qBold, greatVibes;
+    private Typeface qMed, greatVibes;
 
     public RecipeAdapter(Context context, List<RecipeItem> recipeItemList) {
         this.context = context;
         this.recipeItemList = recipeItemList;
         qMed = Typeface.createFromAsset(context.getAssets(), "fonts/Quicksand-Medium.ttf");
-        qBold = Typeface.createFromAsset(context.getAssets(), "fonts/Quicksand-Bold.ttf");
         greatVibes = Typeface.createFromAsset(context.getAssets(), "fonts/GreatVibes-Regular.ttf");
     }
 
@@ -35,14 +34,15 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
 
         private ImageView recipeImage;
         private TextView recipeName;
-        private TextView recipeTime, recipeServings;
+        private TextView recipeTime, recipeIngredientsTotal, recipeServingsTotal;
 
         public RecipeViewHolder(View view) {
             super(view);
             recipeImage = view.findViewById(R.id.recipe_image);
             recipeName = view.findViewById(R.id.recipe_name);
             recipeTime = view.findViewById(R.id.recipe_time);
-            recipeServings = view.findViewById(R.id.recipe_servings);
+            recipeIngredientsTotal = view.findViewById(R.id.recipe_ingredients);
+            recipeServingsTotal = view.findViewById(R.id.recipe_servings);
         }
     }
 
@@ -64,11 +64,10 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         holder.recipeName.setTypeface(greatVibes);
         holder.recipeName.setText(recipeItem.getName());
 
-        holder.recipeTime.setTypeface(qBold);
-        holder.recipeTime.setText(recipeItem.getCookingTime());
+        holder.recipeTime.setTypeface(qMed);
 
-        holder.recipeServings.setTypeface(qBold);
-        holder.recipeServings.setText(recipeItem.getServings());
+        holder.recipeServingsTotal.setTypeface(qMed);
+        //holder.recipeServingsTotal.setText(recipeItem.getServings());
     }
 
     @Override

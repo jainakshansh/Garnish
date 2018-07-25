@@ -7,4 +7,5 @@
     <string name="check_internet_connection">Please check your internet connection.</string>
     <string name="nutella_pie_desc">Try Nutella Pie, the ambrosial combination of hazelnuts and chocolate, which will make you fall into an incoherent puddle of babbling ecstacy.</string>
     <string name="view_recipe">View Recipe</string>
+    <string name="ingredients">Ingredients</string>
 </resources>
