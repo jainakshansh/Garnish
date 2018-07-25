@@ -21,13 +21,13 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
 
     private Context context;
     private List<RecipeItem> recipeItemList;
-    private Typeface qMed, greatVibes;
+    private Typeface qMed, qLight;
 
     public RecipeAdapter(Context context, List<RecipeItem> recipeItemList) {
         this.context = context;
         this.recipeItemList = recipeItemList;
         qMed = Typeface.createFromAsset(context.getAssets(), "fonts/Quicksand-Medium.ttf");
-        greatVibes = Typeface.createFromAsset(context.getAssets(), "fonts/GreatVibes-Regular.ttf");
+        qLight = Typeface.createFromAsset(context.getAssets(), "fonts/Quicksand-Light.ttf");
     }
 
     public class RecipeViewHolder extends RecyclerView.ViewHolder {
@@ -61,7 +61,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
                 .load(recipeItem.getImageUrl())
                 .into(holder.recipeImage);
 
-        holder.recipeName.setTypeface(greatVibes);
+        holder.recipeName.setTypeface(qLight);
         holder.recipeName.setText(recipeItem.getName());
 
         holder.recipeTime.setTypeface(qMed);

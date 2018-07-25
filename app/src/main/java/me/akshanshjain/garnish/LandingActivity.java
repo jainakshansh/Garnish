@@ -1,5 +1,6 @@
 package me.akshanshjain.garnish;
 
+import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +12,8 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -23,6 +26,7 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +38,9 @@ import me.akshanshjain.garnish.Objects.StepsItem;
 
 public class LandingActivity extends AppCompatActivity {
 
-    private Toolbar toolbar;
+    private TextView titleText;
+    private Typeface qMed, qLight;
+    private Button viewRecipeButton;
 
     private RecyclerView recipeRecycler;
     private RecipeAdapter recipeAdapter;
@@ -72,11 +78,6 @@ public class LandingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_landing);
 
-        //Setting up the toolbar for the activity.
-        toolbar = findViewById(R.id.toolbar_landing);
-        setSupportActionBar(toolbar);
-        toolbar.setElevation(0f);
-
         initViews();
 
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
@@ -89,6 +90,15 @@ public class LandingActivity extends AppCompatActivity {
     Initializing and Referencing views from XML.
      */
     private void initViews() {
+
+        qLight = Typeface.createFromAsset(getAssets(), "fonts/Quicksand-Light.ttf");
+        qMed = Typeface.createFromAsset(getAssets(), "fonts/Quicksand-Medium.ttf");
+        titleText = findViewById(R.id.app_title_landing);
+        titleText.setTypeface(qLight);
+
+        viewRecipeButton = findViewById(R.id.view_recipe_button);
+        viewRecipeButton.setTypeface(qMed);
+
         recipeRecycler = findViewById(R.id.recycler_view_landing);
         recipeItemList = new ArrayList<>();
         recipeAdapter = new RecipeAdapter(this, recipeItemList);

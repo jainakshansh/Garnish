@@ -15,7 +15,7 @@ import android.widget.TextView;
 public class SplashActivity extends AppCompatActivity {
 
     private TextView appName;
-    private Typeface greatVibes;
+    private Typeface QLight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,9 +27,9 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
 
         //Setting the typeface on the app name text.
-        greatVibes = Typeface.createFromAsset(getAssets(), "fonts/GreatVibes-Regular.ttf");
+        QLight = Typeface.createFromAsset(getAssets(), "fonts/Quicksand-Light.ttf");
         appName = findViewById(R.id.app_name_splash);
-        appName.setTypeface(greatVibes);
+        appName.setTypeface(QLight);
 
         //Adding fade in animation to the app name text from the XML.
         Animation fadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in);
