@@ -13,6 +13,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -43,9 +44,8 @@ import me.akshanshjain.garnish.Objects.StepsItem;
 public class LandingActivity extends AppCompatActivity {
 
     private LinearLayout parentLayout;
-    private TextView titleText;
+    private Toolbar toolbar;
     private Typeface qMed, qLight;
-    private Button viewRecipeButton;
 
     private RecyclerView recipeRecycler;
     private RecipeAdapter recipeAdapter;
@@ -83,6 +83,10 @@ public class LandingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_landing);
 
+        //Setting up the toolbar for the activity.
+        toolbar = findViewById(R.id.toolbar_landing);
+        setSupportActionBar(toolbar);
+
         initViews();
 
         if (isConnected()) {
@@ -100,17 +104,12 @@ public class LandingActivity extends AppCompatActivity {
         qMed = Typeface.createFromAsset(getAssets(), "fonts/Quicksand-Medium.ttf");
 
         parentLayout = findViewById(R.id.parent_landing);
-        titleText = findViewById(R.id.app_title_landing);
-        titleText.setTypeface(qLight);
-
-        viewRecipeButton = findViewById(R.id.view_recipe_button);
-        viewRecipeButton.setTypeface(qMed);
 
         recipeRecycler = findViewById(R.id.recycler_view_landing);
         recipeItemList = new ArrayList<>();
         recipeAdapter = new RecipeAdapter(this, recipeItemList);
 
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recipeRecycler.setLayoutManager(layoutManager);
         recipeRecycler.setItemAnimator(new DefaultItemAnimator());
         recipeRecycler.setHasFixedSize(true);
@@ -152,13 +151,16 @@ public class LandingActivity extends AppCompatActivity {
         });
 
         requestQueue.add(jsonArrayRequest);
-        new Handler().postDelayed(new Runnable() {
+
+        /*
+        Notifying the adapter once the network request has been completed so that data updates can be visible.
+        */
+        requestQueue.addRequestFinishedListener(new RequestQueue.RequestFinishedListener<Object>() {
             @Override
-            public void run() {
+            public void onRequestFinished(Request<Object> request) {
                 recipeAdapter.notifyDataSetChanged();
-                Log.d("ADebug", "Ingredient: " + recipeItemList.size());
             }
-        }, 2000);
+        });
     }
 
     /*
@@ -202,7 +204,7 @@ public class LandingActivity extends AppCompatActivity {
 
                 //Getting the ingredients array.
                 JSONArray ingredientsArray = recipeObject.getJSONArray(RECIPE_INGREDIENTS);
-
+                ingredientItemList.clear();
                 //Parsing through the ingredients array.
                 for (int c = 0; c < ingredientsArray.length(); c++) {
                     //Getting the ingredients object.

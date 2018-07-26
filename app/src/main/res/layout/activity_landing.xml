@@ -9,16 +9,17 @@
     android:orientation="vertical"
     tools:context=".LandingActivity">
 
-    <TextView
-        android:id="@+id/app_title_landing"
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:drawableStart="@mipmap/ic_launcher_trans"
-        android:gravity="start|center_vertical"
-        android:padding="8dp"
-        android:text="@string/app_name"
-        android:textColor="@android:color/black"
-        android:textSize="24sp" />
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar_landing"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:theme="@style/ToolbarTheme" />
+
+    </android.support.design.widget.AppBarLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view_landing"
@@ -26,20 +27,5 @@
         android:layout_height="0dp"
         android:layout_gravity="center"
         android:layout_weight="1" />
-
-    <Button
-        android:id="@+id/view_recipe_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="16dp"
-        android:background="@drawable/rounded_button"
-        android:gravity="center"
-        android:letterSpacing="0.1"
-        android:paddingEnd="48dp"
-        android:paddingStart="48dp"
-        android:text="@string/view_recipe"
-        android:textAllCaps="false"
-        android:textColor="@android:color/white" />
 
 </LinearLayout>
