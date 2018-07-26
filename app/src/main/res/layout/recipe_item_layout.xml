@@ -10,7 +10,7 @@
     <ImageView
         android:id="@+id/recipe_image"
         android:layout_width="match_parent"
-        android:layout_height="276dp"
+        android:layout_height="256dp"
         android:contentDescription="@string/recipe_image"
         android:scaleType="centerCrop" />
 
@@ -21,7 +21,7 @@
         android:layout_margin="16dp"
         android:gravity="center"
         android:textColor="@android:color/black"
-        android:textSize="30sp"
+        android:textSize="32sp"
         tools:text="Nutella Pie" />
 
     <LinearLayout

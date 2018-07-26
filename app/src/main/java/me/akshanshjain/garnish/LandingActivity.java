@@ -2,7 +2,10 @@ package me.akshanshjain.garnish;
 
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Handler;
+import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -10,9 +13,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,11 +26,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
+import com.facebook.shimmer.ShimmerFrameLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +42,7 @@ import me.akshanshjain.garnish.Objects.StepsItem;
 
 public class LandingActivity extends AppCompatActivity {
 
+    private LinearLayout parentLayout;
     private TextView titleText;
     private Typeface qMed, qLight;
     private Button viewRecipeButton;
@@ -80,9 +85,10 @@ public class LandingActivity extends AppCompatActivity {
 
         initViews();
 
-        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
-        if (connectivityManager.getActiveNetworkInfo() != null) {
+        if (isConnected()) {
             networkCalls();
+        } else {
+            callSnackbar(requestQueue, jsonArrayRequest);
         }
     }
 
@@ -90,9 +96,10 @@ public class LandingActivity extends AppCompatActivity {
     Initializing and Referencing views from XML.
      */
     private void initViews() {
-
         qLight = Typeface.createFromAsset(getAssets(), "fonts/Quicksand-Light.ttf");
         qMed = Typeface.createFromAsset(getAssets(), "fonts/Quicksand-Medium.ttf");
+
+        parentLayout = findViewById(R.id.parent_landing);
         titleText = findViewById(R.id.app_title_landing);
         titleText.setTypeface(qLight);
 
@@ -116,6 +123,19 @@ public class LandingActivity extends AppCompatActivity {
         stepsItemList = new ArrayList<>();
     }
 
+    /*
+    Returns a boolean value corresponding to the network state.
+    */
+    private boolean isConnected() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        return networkInfo != null;
+    }
+
+    /*
+    Uses Volley to perform network requests using the link.
+    Updates the adapter after the data is received.
+    */
     private void networkCalls() {
         requestQueue = Volley.newRequestQueue(this);
         jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, BASE_URL, null,
@@ -142,6 +162,29 @@ public class LandingActivity extends AppCompatActivity {
     }
 
     /*
+    Shows a snackbar when there is no reliable internet connection.
+    Has an option to try again.
+    */
+    private void callSnackbar(final RequestQueue requestQueue, final JsonArrayRequest jsonArrayRequest) {
+        Snackbar snackbar = Snackbar.make(parentLayout, "Connection timed out!", Snackbar.LENGTH_INDEFINITE)
+                .setAction("RELOAD", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (isConnected()) {
+                            networkCalls();
+                        } else {
+                            callSnackbar(requestQueue, jsonArrayRequest);
+                        }
+                    }
+                });
+        snackbar.setActionTextColor(ContextCompat.getColor(this, R.color.colorAccent));
+        View snackbarView = snackbar.getView();
+        TextView snackText = snackbarView.findViewById(android.support.design.R.id.snackbar_text);
+        snackText.setTextColor(ContextCompat.getColor(this, android.R.color.white));
+        snackbar.show();
+    }
+
+    /*
     Extracting all the data about the recipe including steps and ingredients.
     */
     private void extractFromJSON(JSONArray baseJSONResponse) {
@@ -155,7 +198,7 @@ public class LandingActivity extends AppCompatActivity {
                 int recipeID = recipeObject.getInt(RECIPE_ID);
                 String recipeName = recipeObject.getString(RECIPE_NAME);
                 int servings = recipeObject.getInt(RECIPE_SERVINGS);
-                String recipeImage = "";
+                String recipeImage = "", cookingTime = "";
 
                 //Getting the ingredients array.
                 JSONArray ingredientsArray = recipeObject.getJSONArray(RECIPE_INGREDIENTS);
@@ -194,17 +237,22 @@ public class LandingActivity extends AppCompatActivity {
                     stepsItemList.add(new StepsItem(id, shortDesc, description, videoURL, thumbnailURL));
                 }
 
-                recipeImage = additionalDetails(i);
+                recipeImage = imageLinks(i);
+                cookingTime = cookingTimeFunc(i);
 
                 //Adding all the recipe elements to an array list.
-                recipeItemList.add(new RecipeItem(recipeID, recipeName, ingredientItemList, stepsItemList, servings, recipeImage, null));
+                recipeItemList.add(new RecipeItem(recipeID, recipeName, ingredientItemList, stepsItemList, servings, recipeImage, cookingTime));
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
-    private String additionalDetails(int position) {
+    /*
+    This function returns the images for the 4 recipes that are in the JSON.
+    Since no recipe comes with the image, added links to improve the UI.
+    */
+    private String imageLinks(int position) {
         switch (position) {
             case 0:
                 return "https://singapore.theexpat.com/wp-content/uploads/2015/09/Comestivel-Desserts.png";
@@ -214,6 +262,24 @@ public class LandingActivity extends AppCompatActivity {
                 return "https://balfours.com.au/content/uploads/2016/12/cakes-and-pastries_french-coffee-bar-cake-900x0-c-default.png";
             case 3:
                 return "https://www.nuyofrozenyogurt.com/wp-content/uploads/2015/09/cheesecake.jpg";
+        }
+        return null;
+    }
+
+    /*
+    This returns the average cooking time for the recipes.
+    Required to provide a consistent UI.
+    */
+    private String cookingTimeFunc(int position) {
+        switch (position) {
+            case 0:
+                return "1 hour 30 min";
+            case 1:
+                return "20 min";
+            case 2:
+                return "1 hour 15 min";
+            case 3:
+                return "2 hour 40 min";
         }
         return null;
     }

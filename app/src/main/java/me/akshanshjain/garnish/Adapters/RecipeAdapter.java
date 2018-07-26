@@ -21,12 +21,11 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
 
     private Context context;
     private List<RecipeItem> recipeItemList;
-    private Typeface qMed, qLight;
+    private Typeface qLight;
 
     public RecipeAdapter(Context context, List<RecipeItem> recipeItemList) {
         this.context = context;
         this.recipeItemList = recipeItemList;
-        qMed = Typeface.createFromAsset(context.getAssets(), "fonts/Quicksand-Medium.ttf");
         qLight = Typeface.createFromAsset(context.getAssets(), "fonts/Quicksand-Light.ttf");
     }
 
@@ -64,10 +63,16 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         holder.recipeName.setTypeface(qLight);
         holder.recipeName.setText(recipeItem.getName());
 
-        holder.recipeTime.setTypeface(qMed);
+        holder.recipeTime.setTypeface(qLight);
+        holder.recipeTime.setText(recipeItem.getCookingTime());
 
-        holder.recipeServingsTotal.setTypeface(qMed);
-        //holder.recipeServingsTotal.setText(recipeItem.getServings());
+        String ingredients = String.valueOf(recipeItem.getIngredientItemList().size()) + " ingredients";
+        holder.recipeIngredientsTotal.setTypeface(qLight);
+        holder.recipeIngredientsTotal.setText(ingredients);
+
+        String servings = String.valueOf(recipeItem.getServings()) + " servings";
+        holder.recipeServingsTotal.setTypeface(qLight);
+        holder.recipeServingsTotal.setText(servings);
     }
 
     @Override
