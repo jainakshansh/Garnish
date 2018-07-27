@@ -1,7 +1,9 @@
 package me.akshanshjain.garnish.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -16,8 +18,11 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import me.akshanshjain.garnish.Objects.IngredientItem;
 import me.akshanshjain.garnish.Objects.RecipeItem;
+import me.akshanshjain.garnish.Objects.StepsItem;
 import me.akshanshjain.garnish.R;
+import me.akshanshjain.garnish.RecipeDetailActivity;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder> {
 
@@ -58,33 +63,56 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
 
     @Override
     public void onBindViewHolder(@NonNull final RecipeViewHolder holder, int position) {
-        RecipeItem recipeItem = recipeItemList.get(position);
+        final RecipeItem recipeItem = recipeItemList.get(position);
 
+        //Loading the image of the recipe.
         Picasso.get()
                 .load(recipeItem.getImageUrl())
                 .into(holder.recipeImage);
 
+        //Adding the name of the recipe.
         holder.recipeName.setTypeface(qLight);
         holder.recipeName.setText(recipeItem.getName());
 
+        //Adding cooking time for the recipe.
         holder.recipeTime.setTypeface(qLight);
         holder.recipeTime.setText(recipeItem.getCookingTime());
 
-        String ingredients = String.valueOf(recipeItem.getIngredientItemList().size()) + " ingredients";
+        //Adding number of ingredients required for the recipe.
+        int numberOfIng = recipeItem.getIngredientItemList().size();
+        String ingredients = String.valueOf(numberOfIng) + " ingredients";
         holder.recipeIngredientsTotal.setTypeface(qLight);
         holder.recipeIngredientsTotal.setText(ingredients);
 
+        //Adding the total servings for the recipe.
         String servings = String.valueOf(recipeItem.getServings()) + " servings";
         holder.recipeServingsTotal.setTypeface(qLight);
         holder.recipeServingsTotal.setText(servings);
 
+        //Show Recipe button actions to go to detailed view.
         holder.showRecipe.setTypeface(qLight);
         holder.showRecipe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 holder.showRecipe.setBackground(ContextCompat.getDrawable(context.getApplicationContext(), R.drawable.button_border_filled));
                 holder.showRecipe.setTextColor(ContextCompat.getColor(context.getApplicationContext(), android.R.color.white));
-                //TODO: Need to start the detailed activity on click of show recipe button.
+
+                //Getting all the required information
+                int id = recipeItem.getId();
+                String name = recipeItem.getName();
+                List<IngredientItem> ingredientItemList = recipeItem.getIngredientItemList();
+                List<StepsItem> stepsItemList = recipeItem.getStepsItemList();
+                int servings = recipeItem.getServings();
+                String image = recipeItem.getImageUrl();
+                String cookingTime = recipeItem.getCookingTime();
+                RecipeItem recipe = new RecipeItem(id, name, ingredientItemList, stepsItemList, servings, image, cookingTime);
+
+                //Starting the detailed recipe activity and passing in the parcelable bundle.
+                Intent detailedRecipe = new Intent(context.getApplicationContext(), RecipeDetailActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("RECIPEINFO", recipe);
+                detailedRecipe.putExtras(bundle);
+                context.startActivity(detailedRecipe);
             }
         });
     }
