@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#FFFFFF</color>
     <color name="colorPrimaryDark">#BABABA</color>
-    <color name="colorAccent">#FFEB3B</color>
+    <color name="colorAccent">#7E450A</color>
 
     <color name="chocolateBrown">#7E450A</color>
 </resources>
