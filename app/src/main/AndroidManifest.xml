@@ -22,7 +22,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".LandingActivity" />
-        <activity android:name=".RecipeDetailActivity"></activity>
+        <activity
+            android:name=".RecipeDetailActivity"
+            android:parentActivityName=".LandingActivity" />
     </application>
 
 </manifest>

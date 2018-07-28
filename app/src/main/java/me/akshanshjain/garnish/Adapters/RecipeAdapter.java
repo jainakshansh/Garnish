@@ -29,6 +29,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     private Context context;
     private List<RecipeItem> recipeItemList;
     private Typeface qLight;
+    private static final String BUNDLE_KEY = "RECIPEINFO";
 
     public RecipeAdapter(Context context, List<RecipeItem> recipeItemList) {
         this.context = context;
@@ -97,7 +98,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
                 holder.showRecipe.setBackground(ContextCompat.getDrawable(context.getApplicationContext(), R.drawable.button_border_filled));
                 holder.showRecipe.setTextColor(ContextCompat.getColor(context.getApplicationContext(), android.R.color.white));
 
-                //Getting all the required information
+                //Getting all the required information from the recipe list.
                 int id = recipeItem.getId();
                 String name = recipeItem.getName();
                 List<IngredientItem> ingredientItemList = recipeItem.getIngredientItemList();
@@ -110,7 +111,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
                 //Starting the detailed recipe activity and passing in the parcelable bundle.
                 Intent detailedRecipe = new Intent(context.getApplicationContext(), RecipeDetailActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putParcelable("RECIPEINFO", recipe);
+                bundle.putParcelable(BUNDLE_KEY, recipe);
                 detailedRecipe.putExtras(bundle);
                 context.startActivity(detailedRecipe);
             }
