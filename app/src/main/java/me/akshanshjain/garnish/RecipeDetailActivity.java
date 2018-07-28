@@ -84,7 +84,6 @@ public class RecipeDetailActivity extends AppCompatActivity {
         viewPager = findViewById(R.id.view_pager_recipe_detail);
         setupViewPager();
         tabLayout.setupWithViewPager(viewPager);
-
     }
 
     /*

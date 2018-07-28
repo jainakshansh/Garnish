@@ -219,6 +219,7 @@ public class LandingActivity extends AppCompatActivity {
                     ingredientItemList.add(new IngredientItem(quantity, measure, ingredient));
                 }
 
+                Log.d("ADebug", ingredientItemList.size() + "");
 
                 //Getting the steps array.
                 JSONArray stepsArray = recipeObject.getJSONArray(RECIPE_STEPS);
@@ -238,6 +239,8 @@ public class LandingActivity extends AppCompatActivity {
                     //Adding all the step elements to an array list.
                     stepsItemList.add(new StepsItem(id, shortDesc, description, videoURL, thumbnailURL));
                 }
+
+                Log.d("ADebug", stepsItemList.size() + "");
 
                 recipeImage = imageLinks(i);
                 cookingTime = cookingTimeFunc(i);

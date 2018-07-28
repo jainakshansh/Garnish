@@ -13,6 +13,7 @@
         android:orientation="horizontal">
 
         <TextView
+            android:id="@+id/quantity_measure_ingredient"
             android:layout_width="84dp"
             android:layout_height="84dp"
             android:layout_gravity="center"
@@ -20,11 +21,12 @@
             android:layout_marginStart="8dp"
             android:background="@drawable/circle_text"
             android:gravity="center"
-            tools:text="2\nTBPS"
             android:textColor="@android:color/white"
-            android:textSize="24sp" />
+            android:textSize="24sp"
+            tools:text="2\nTBPS" />
 
         <TextView
+            android:id="@+id/ingredient_name"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginBottom="8dp"

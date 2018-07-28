@@ -18,6 +18,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import me.akshanshjain.garnish.Fragments.IngredientsFragment;
 import me.akshanshjain.garnish.Objects.IngredientItem;
 import me.akshanshjain.garnish.Objects.RecipeItem;
 import me.akshanshjain.garnish.Objects.StepsItem;
@@ -110,6 +111,10 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
                 Bundle bundle = new Bundle();
                 bundle.putParcelable(BUNDLE_KEY, recipe);
                 detailedRecipe.putExtras(bundle);
+
+                IngredientsFragment ingredientsFragment = new IngredientsFragment();
+                ingredientsFragment.setArguments(bundle);
+
                 context.startActivity(detailedRecipe);
             }
         });
