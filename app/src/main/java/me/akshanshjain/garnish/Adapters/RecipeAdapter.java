@@ -95,9 +95,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         holder.showRecipe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                holder.showRecipe.setBackground(ContextCompat.getDrawable(context.getApplicationContext(), R.drawable.button_border_filled));
-                holder.showRecipe.setTextColor(ContextCompat.getColor(context.getApplicationContext(), android.R.color.white));
-
                 //Getting all the required information from the recipe list.
                 int id = recipeItem.getId();
                 String name = recipeItem.getName();
