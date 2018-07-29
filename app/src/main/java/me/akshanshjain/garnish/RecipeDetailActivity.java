@@ -5,11 +5,20 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import me.akshanshjain.garnish.Adapters.IngredientsRecyclerAdapter;
+import me.akshanshjain.garnish.Objects.IngredientItem;
 import me.akshanshjain.garnish.Objects.RecipeItem;
 
 public class RecipeDetailActivity extends AppCompatActivity {
@@ -21,6 +30,11 @@ public class RecipeDetailActivity extends AppCompatActivity {
     private Typeface QLight;
 
     private RecipeItem recipeItem;
+
+    private TextView ingredientsLabel;
+    private RecyclerView ingredientsRecycler;
+    private List<IngredientItem> ingredientItemList;
+    private IngredientsRecyclerAdapter ingredientsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,5 +73,22 @@ public class RecipeDetailActivity extends AppCompatActivity {
         Picasso.get()
                 .load(recipeItem.getImageUrl())
                 .into(recipeImage);
+
+        settingIngredients();
+    }
+
+    /*
+    Setting the ingredients into a recycler view in a card format.
+    */
+    private void settingIngredients() {
+        ingredientsRecycler = findViewById(R.id.recycler_view_ingredients);
+        ingredientItemList = new ArrayList<>();
+        ingredientsAdapter = new IngredientsRecyclerAdapter(this, ingredientItemList);
+
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        ingredientsRecycler.setLayoutManager(layoutManager);
+        ingredientsRecycler.setItemAnimator(new DefaultItemAnimator());
+        ingredientsRecycler.setHasFixedSize(true);
+        ingredientsRecycler.setAdapter(ingredientsAdapter);
     }
 }
