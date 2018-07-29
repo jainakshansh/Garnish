@@ -18,10 +18,4 @@
         <item name="android:fontFamily">@font/quicksand_light</item>
     </style>
 
-    <style name="TabLayoutTheme" parent="TextAppearance.Design.Tab">
-        <item name="android:textSize">14sp</item>
-        <item name="android:fontFamily">@font/quicksand_light</item>
-        <item name="android:letterSpacing">0.1</item>
-    </style>
-
 </resources>

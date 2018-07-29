@@ -191,10 +191,12 @@ public class LandingActivity extends AppCompatActivity {
     */
     private void extractFromJSON(JSONArray baseJSONResponse) {
         try {
+            Log.d("ADebug", "Base Response length: " + baseJSONResponse.length());
             //Parsing through all the child elements in the node.
             for (int i = 0; i < baseJSONResponse.length(); i++) {
                 //Getting the first object from the array.
                 JSONObject recipeObject = baseJSONResponse.getJSONObject(i);
+                Log.d("ADebug", "Object Number: " + i);
 
                 //Extracting relevant information from the object.
                 int recipeID = recipeObject.getInt(RECIPE_ID);
@@ -219,11 +221,11 @@ public class LandingActivity extends AppCompatActivity {
                     ingredientItemList.add(new IngredientItem(quantity, measure, ingredient));
                 }
 
-                Log.d("ADebug", ingredientItemList.size() + "");
+                Log.d("ADebug", "Ing list len after parsing: " + ingredientItemList.size());
 
                 //Getting the steps array.
                 JSONArray stepsArray = recipeObject.getJSONArray(RECIPE_STEPS);
-
+                stepsItemList.clear();
                 //Parsing through the steps array.
                 for (int c = 0; c < stepsArray.length(); c++) {
                     //Getting the steps object.
@@ -240,7 +242,7 @@ public class LandingActivity extends AppCompatActivity {
                     stepsItemList.add(new StepsItem(id, shortDesc, description, videoURL, thumbnailURL));
                 }
 
-                Log.d("ADebug", stepsItemList.size() + "");
+                Log.d("ADebug", "Step list len after parsing: " + stepsItemList.size());
 
                 recipeImage = imageLinks(i);
                 cookingTime = cookingTimeFunc(i);
