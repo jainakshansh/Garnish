@@ -74,6 +74,9 @@ public class RecipeDetailActivity extends AppCompatActivity {
                 .load(recipeItem.getImageUrl())
                 .into(recipeImage);
 
+        ingredientsLabel = findViewById(R.id.ingredients_label_detail);
+        ingredientsLabel.setTypeface(QLight);
+
         settingIngredients();
     }
 

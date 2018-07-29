@@ -191,12 +191,12 @@ public class LandingActivity extends AppCompatActivity {
     */
     private void extractFromJSON(JSONArray baseJSONResponse) {
         try {
-            Log.d("ADebug", "Base Response length: " + baseJSONResponse.length());
             //Parsing through all the child elements in the node.
             for (int i = 0; i < baseJSONResponse.length(); i++) {
                 //Getting the first object from the array.
                 JSONObject recipeObject = baseJSONResponse.getJSONObject(i);
-                Log.d("ADebug", "Object Number: " + i);
+
+                Log.d("ADebug", "" + recipeObject.length());
 
                 //Extracting relevant information from the object.
                 int recipeID = recipeObject.getInt(RECIPE_ID);
