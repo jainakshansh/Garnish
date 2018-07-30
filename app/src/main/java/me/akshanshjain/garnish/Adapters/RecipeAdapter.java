@@ -5,8 +5,8 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import me.akshanshjain.garnish.Objects.IngredientItem;
@@ -29,15 +30,21 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     private Context context;
     private List<RecipeItem> recipeItemList;
     private Typeface qLight;
-    private static final String BUNDLE_KEY = "RECIPEINFO";
 
-    public RecipeAdapter(Context context, List<RecipeItem> recipeItemList) {
+
+    private RecipeItemClickListener recipeItemClickListener;
+
+    private List<IngredientItem> ingredientItemList;
+    private List<StepsItem> stepsItemList;
+
+    public RecipeAdapter(Context context, List<RecipeItem> recipeItemList, RecipeItemClickListener listener) {
         this.context = context;
         this.recipeItemList = recipeItemList;
+        recipeItemClickListener = listener;
         qLight = Typeface.createFromAsset(context.getAssets(), "fonts/Quicksand-Light.ttf");
     }
 
-    public class RecipeViewHolder extends RecyclerView.ViewHolder {
+    public class RecipeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private ImageView recipeImage;
         private TextView recipeName;
@@ -52,6 +59,14 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
             recipeIngredientsTotal = view.findViewById(R.id.recipe_ingredients);
             recipeServingsTotal = view.findViewById(R.id.recipe_servings);
             showRecipe = view.findViewById(R.id.show_recipe);
+
+            showRecipe.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            int clickedItemPosition = getAdapterPosition();
+            recipeItemClickListener.onRecipeItemClickListener(clickedItemPosition);
         }
     }
 
@@ -81,7 +96,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
 
         //Adding number of ingredients required for the recipe.
         int numberOfIng = recipeItem.getIngredientItemList().size();
-        String ingredients = String.valueOf(numberOfIng) + " ingredients";
+        final String ingredients = String.valueOf(numberOfIng) + " ingredients";
         holder.recipeIngredientsTotal.setTypeface(qLight);
         holder.recipeIngredientsTotal.setText(ingredients);
 
@@ -90,6 +105,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         holder.recipeServingsTotal.setTypeface(qLight);
         holder.recipeServingsTotal.setText(servings);
 
+        /*
         //Show Recipe button actions to go to detailed view.
         holder.showRecipe.setTypeface(qLight);
         holder.showRecipe.setOnClickListener(new View.OnClickListener() {
@@ -97,12 +113,18 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
             public void onClick(View view) {
                 //Getting all the required information from the recipe list.
                 int id = recipeItem.getId();
+                Log.d("ADebug", "" + id);
                 String name = recipeItem.getName();
-                List<IngredientItem> ingredientItemList = recipeItem.getIngredientItemList();
-                List<StepsItem> stepsItemList = recipeItem.getStepsItemList();
+
+                ingredientItemList = new ArrayList<>();
+                stepsItemList = new ArrayList<>();
+                ingredientItemList.addAll(recipeItem.getIngredientItemList());
+                stepsItemList.addAll(recipeItem.getStepsItemList());
+
                 int servings = recipeItem.getServings();
                 String image = recipeItem.getImageUrl();
                 String cookingTime = recipeItem.getCookingTime();
+
                 RecipeItem recipe = new RecipeItem(id, name, ingredientItemList, stepsItemList, servings, image, cookingTime);
 
                 //Starting the detailed recipe activity and passing in the parcelable bundle.
@@ -114,10 +136,15 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
                 context.startActivity(detailedRecipe);
             }
         });
+        */
     }
 
     @Override
     public int getItemCount() {
         return recipeItemList.size();
+    }
+
+    public interface RecipeItemClickListener {
+        void onRecipeItemClickListener(int clickedItemIndex);
     }
 }

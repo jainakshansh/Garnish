@@ -1,5 +1,6 @@
 package me.akshanshjain.garnish;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -41,7 +42,7 @@ import me.akshanshjain.garnish.Objects.IngredientItem;
 import me.akshanshjain.garnish.Objects.RecipeItem;
 import me.akshanshjain.garnish.Objects.StepsItem;
 
-public class LandingActivity extends AppCompatActivity {
+public class LandingActivity extends AppCompatActivity implements RecipeAdapter.RecipeItemClickListener {
 
     private LinearLayout parentLayout;
     private Toolbar toolbar;
@@ -49,14 +50,18 @@ public class LandingActivity extends AppCompatActivity {
 
     private RecyclerView recipeRecycler;
     private RecipeAdapter recipeAdapter;
+    private RecipeItem recipeItem;
 
-    private List<RecipeItem> recipeItemList;
-    private List<IngredientItem> ingredientItemList;
-    private List<StepsItem> stepsItemList;
+    private ArrayList<RecipeItem> recipeItemList;
+    private ArrayList<IngredientItem> ingredientItemList;
+    private ArrayList<StepsItem> stepsItemList;
 
     private RequestQueue requestQueue;
     private JsonArrayRequest jsonArrayRequest;
     private static final String BASE_URL = "https://d17h27t6h515a5.cloudfront.net/topher/2017/May/59121517_baking/baking.json";
+    private static final String BUNDLE_KEY = "RECIPEINFO";
+    private static final String INGREDIENTS_KEY = "INGREDIENTSINFO";
+    private static final String STEPS_KEY = "STEPSINFO";
 
     //String constants for the Recipe JSON parsing.
     private static final String RECIPE_ID = "id";
@@ -107,7 +112,7 @@ public class LandingActivity extends AppCompatActivity {
 
         recipeRecycler = findViewById(R.id.recycler_view_landing);
         recipeItemList = new ArrayList<>();
-        recipeAdapter = new RecipeAdapter(this, recipeItemList);
+        recipeAdapter = new RecipeAdapter(this, recipeItemList, this);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recipeRecycler.setLayoutManager(layoutManager);
@@ -196,13 +201,11 @@ public class LandingActivity extends AppCompatActivity {
                 //Getting the first object from the array.
                 JSONObject recipeObject = baseJSONResponse.getJSONObject(i);
 
-                Log.d("ADebug", "" + recipeObject.length());
-
                 //Extracting relevant information from the object.
                 int recipeID = recipeObject.getInt(RECIPE_ID);
                 String recipeName = recipeObject.getString(RECIPE_NAME);
                 int servings = recipeObject.getInt(RECIPE_SERVINGS);
-                String recipeImage = "", cookingTime = "";
+                String recipeImage, cookingTime;
 
                 //Getting the ingredients array.
                 JSONArray ingredientsArray = recipeObject.getJSONArray(RECIPE_INGREDIENTS);
@@ -221,7 +224,6 @@ public class LandingActivity extends AppCompatActivity {
                     ingredientItemList.add(new IngredientItem(quantity, measure, ingredient));
                 }
 
-                Log.d("ADebug", "Ing list len after parsing: " + ingredientItemList.size());
 
                 //Getting the steps array.
                 JSONArray stepsArray = recipeObject.getJSONArray(RECIPE_STEPS);
@@ -242,13 +244,13 @@ public class LandingActivity extends AppCompatActivity {
                     stepsItemList.add(new StepsItem(id, shortDesc, description, videoURL, thumbnailURL));
                 }
 
-                Log.d("ADebug", "Step list len after parsing: " + stepsItemList.size());
 
                 recipeImage = imageLinks(i);
                 cookingTime = cookingTimeFunc(i);
 
                 //Adding all the recipe elements to an array list.
-                recipeItemList.add(new RecipeItem(recipeID, recipeName, ingredientItemList, stepsItemList, servings, recipeImage, cookingTime));
+                recipeItem = new RecipeItem(recipeID, recipeName, ingredientItemList, stepsItemList, servings, recipeImage, cookingTime);
+                recipeItemList.add(recipeItem);
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -289,5 +291,15 @@ public class LandingActivity extends AppCompatActivity {
                 return "2 hour 40 min";
         }
         return null;
+    }
+
+    @Override
+    public void onRecipeItemClickListener(int clickedItemIndex) {
+        Intent detailedIntent = new Intent(getApplicationContext(), RecipeDetailActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(BUNDLE_KEY, recipeItem);
+        bundle.putParcelableArrayList(INGREDIENTS_KEY, ingredientItemList);
+        bundle.putParcelableArrayList(STEPS_KEY, stepsItemList);
+        startActivity(detailedIntent);
     }
 }
