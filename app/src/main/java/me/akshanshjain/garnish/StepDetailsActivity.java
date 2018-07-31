@@ -4,6 +4,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
+import me.akshanshjain.garnish.Fragments.StepsListFragment;
+
 public class StepDetailsActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
@@ -20,5 +22,8 @@ public class StepDetailsActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+
+        //Creating a new
+        StepsListFragment stepsListFragment = new StepsListFragment();
     }
 }

@@ -22,6 +22,7 @@ import me.akshanshjain.garnish.Adapters.IngredientsRecyclerAdapter;
 import me.akshanshjain.garnish.Adapters.RecipeAdapter;
 import me.akshanshjain.garnish.Objects.IngredientItem;
 import me.akshanshjain.garnish.Objects.RecipeItem;
+import me.akshanshjain.garnish.Objects.StepsItem;
 
 public class RecipeDetailActivity extends AppCompatActivity {
 
@@ -35,8 +36,10 @@ public class RecipeDetailActivity extends AppCompatActivity {
 
     private TextView ingredientsLabel;
     private RecyclerView ingredientsRecycler;
-    private List<IngredientItem> ingredientItemList;
+    private ArrayList<IngredientItem> ingredientItemList;
     private IngredientsRecyclerAdapter ingredientsAdapter;
+
+    private ArrayList<StepsItem> stepsItemList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
