@@ -1,5 +1,6 @@
 package me.akshanshjain.garnish;
 
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -23,7 +24,15 @@ public class StepDetailsActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        //Creating a new
+        //Creating a new StepsListFragment instance.
         StepsListFragment stepsListFragment = new StepsListFragment();
+
+        //Using a fragment manager and transaction to add fragment to the screen.
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
+        //Fragment transaction.
+        fragmentManager.beginTransaction()
+                //TODO Need to add the fragment to be committed.
+                .commit();
     }
 }
