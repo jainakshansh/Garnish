@@ -1,6 +1,7 @@
 package me.akshanshjain.garnish.Adapters;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,10 +18,12 @@ public class StepsRecyclerAdapter extends RecyclerView.Adapter<StepsRecyclerAdap
 
     private Context context;
     private ArrayList<StepsItem> stepsItemList;
+    private Typeface QLight;
 
     public StepsRecyclerAdapter(Context context, ArrayList<StepsItem> stepsItemList) {
         this.context = context;
         this.stepsItemList = stepsItemList;
+        QLight = Typeface.createFromAsset(context.getAssets(), "fonts/Quicksand-Light.ttf");
     }
 
     public class StepsViewHolder extends RecyclerView.ViewHolder {
@@ -29,6 +32,8 @@ public class StepsRecyclerAdapter extends RecyclerView.Adapter<StepsRecyclerAdap
 
         public StepsViewHolder(View view) {
             super(view);
+            stepNumberTv = view.findViewById(R.id.step_number);
+            stepShortDescTv = view.findViewById(R.id.step_short_desc);
         }
     }
 
@@ -41,6 +46,13 @@ public class StepsRecyclerAdapter extends RecyclerView.Adapter<StepsRecyclerAdap
 
     @Override
     public void onBindViewHolder(@NonNull StepsViewHolder holder, int position) {
+        StepsItem stepsItem = stepsItemList.get(position);
+
+        holder.stepNumberTv.setTypeface(QLight);
+        holder.stepNumberTv.setText(position);
+
+        holder.stepShortDescTv.setTypeface(QLight);
+        holder.stepShortDescTv.setText(stepsItem.getShortDesc());
     }
 
     @Override
