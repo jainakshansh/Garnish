@@ -50,7 +50,7 @@ public class IngredientsRecyclerAdapter extends RecyclerView.Adapter<Ingredients
         IngredientItem ingredientItem = ingredientItemList.get(position);
 
         holder.quantityTv.setTypeface(QLight);
-        holder.quantityTv.setText(ingredientItem.getQuantity());
+        holder.quantityTv.setText(String.valueOf(ingredientItem.getQuantity()));
 
         holder.measureTv.setTypeface(QLight);
         holder.measureTv.setText(ingredientItem.getMeasure());

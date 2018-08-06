@@ -33,6 +33,9 @@ public class RecipeDetailActivity extends AppCompatActivity {
     private Typeface QLight;
 
     private RecipeItem recipeItem;
+    private static final String BUNDLE_KEY = "RECIPEINFO";
+    private static final String INGREDIENTS_KEY = "INGREDIENTSINFO";
+    private static final String STEPS_KEY = "STEPSINFO";
 
     private TextView ingredientsLabel;
     private RecyclerView ingredientsRecycler;
@@ -56,7 +59,9 @@ public class RecipeDetailActivity extends AppCompatActivity {
         //Getting the data bundle from the passed intent.
         Bundle data = getIntent().getExtras();
         if (data != null) {
-            recipeItem = data.getParcelable("RECIPEINFO");
+            recipeItem = data.getParcelable(BUNDLE_KEY);
+            ingredientItemList = data.getParcelableArrayList(INGREDIENTS_KEY);
+            stepsItemList = data.getParcelableArrayList(STEPS_KEY);
         }
 
         //Setting the up button for the toolbar.
@@ -84,6 +89,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
         ingredientsLabel.setTypeface(QLight);
 
         settingIngredients();
+        ingredientsAdapter.notifyDataSetChanged();
     }
 
     /*
@@ -91,7 +97,6 @@ public class RecipeDetailActivity extends AppCompatActivity {
     */
     private void settingIngredients() {
         ingredientsRecycler = findViewById(R.id.recycler_view_ingredients);
-        ingredientItemList = new ArrayList<>();
         ingredientsAdapter = new IngredientsRecyclerAdapter(this, ingredientItemList);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);

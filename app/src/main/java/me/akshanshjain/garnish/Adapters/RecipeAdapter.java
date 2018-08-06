@@ -3,6 +3,7 @@ package me.akshanshjain.garnish.Adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import me.akshanshjain.garnish.Objects.RecipeItem;
@@ -64,7 +66,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
 
     @Override
     public void onBindViewHolder(@NonNull final RecipeViewHolder holder, int position) {
-        final RecipeItem recipeItem = recipeItemList.get(position);
+        final RecipeItem recipeItem = recipeItemList.get(holder.getAdapterPosition());
 
         //Loading the image of the recipe.
         Picasso.get()
@@ -85,8 +87,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         holder.recipeIngredientsTotal.setTypeface(QLight);
         holder.recipeIngredientsTotal.setText(ingredients);
 
-        Log.d("ADebug", ingredients);
-
         //Adding the total servings for the recipe.
         String servings = String.valueOf(recipeItem.getServings() + " servings");
         holder.recipeServingsTotal.setTypeface(QLight);
@@ -98,8 +98,8 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
             public void onClick(View view) {
                 Intent detailedRecipeIntent = new Intent(context.getApplicationContext(), RecipeDetailActivity.class);
                 detailedRecipeIntent.putExtra(BUNDLE_KEY, recipeItem);
-                detailedRecipeIntent.putParcelableArrayListExtra(INGREDIENTS_KEY, recipeItem.getIngredientItemList());
-                detailedRecipeIntent.putParcelableArrayListExtra(STEPS_KEY, recipeItem.getStepsItemList());
+                detailedRecipeIntent.putParcelableArrayListExtra(INGREDIENTS_KEY, new ArrayList<Parcelable>(recipeItemList.get(holder.getAdapterPosition()).getIngredientItemList()));
+                detailedRecipeIntent.putParcelableArrayListExtra(STEPS_KEY, new ArrayList<Parcelable>(recipeItemList.get(holder.getAdapterPosition()).getStepsItemList()));
                 context.startActivity(detailedRecipeIntent);
             }
         });

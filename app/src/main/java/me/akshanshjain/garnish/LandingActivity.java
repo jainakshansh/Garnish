@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -49,8 +50,6 @@ public class LandingActivity extends AppCompatActivity {
     private RecipeItem recipeItem;
 
     private ArrayList<RecipeItem> recipeItemList;
-    private ArrayList<IngredientItem> ingredientItemList;
-    private ArrayList<StepsItem> stepsItemList;
 
     private RequestQueue requestQueue;
     private JsonArrayRequest jsonArrayRequest;
@@ -115,9 +114,6 @@ public class LandingActivity extends AppCompatActivity {
 
         SnapHelper snapHelper = new LinearSnapHelper();
         snapHelper.attachToRecyclerView(recipeRecycler);
-
-        ingredientItemList = new ArrayList<>();
-        stepsItemList = new ArrayList<>();
     }
 
     /*
@@ -200,9 +196,11 @@ public class LandingActivity extends AppCompatActivity {
                 int servings = recipeObject.getInt(RECIPE_SERVINGS);
                 String recipeImage, cookingTime;
 
+                ArrayList<IngredientItem> ingredientItemList = new ArrayList<>();
+                ArrayList<StepsItem> stepsItemList = new ArrayList<>();
+
                 //Getting the ingredients array.
                 JSONArray ingredientsArray = recipeObject.getJSONArray(RECIPE_INGREDIENTS);
-                ingredientItemList.clear();
                 //Parsing through the ingredients array.
                 for (int c = 0; c < ingredientsArray.length(); c++) {
                     //Getting the ingredients object.
@@ -220,7 +218,6 @@ public class LandingActivity extends AppCompatActivity {
 
                 //Getting the steps array.
                 JSONArray stepsArray = recipeObject.getJSONArray(RECIPE_STEPS);
-                stepsItemList.clear();
                 //Parsing through the steps array.
                 for (int c = 0; c < stepsArray.length(); c++) {
                     //Getting the steps object.
@@ -243,8 +240,7 @@ public class LandingActivity extends AppCompatActivity {
 
                 //Adding all the recipe elements to an array list.
                 recipeItem = new RecipeItem(recipeID, recipeName, ingredientItemList, stepsItemList, servings, recipeImage, cookingTime);
-                Log.d("ADebug", ingredientItemList.size() + "\t" + stepsItemList.size());
-                recipeItemList.add(recipeItem);
+                recipeItemList.add(i, recipeItem);
             }
         } catch (JSONException e) {
             e.printStackTrace();
