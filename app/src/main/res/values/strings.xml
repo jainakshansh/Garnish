@@ -9,4 +9,5 @@
     <string name="view_recipe">View Recipe</string>
     <string name="ingredients">Ingredients</string>
     <string name="show_recipe">Show Recipe</string>
+    <string name="show_steps">Show Steps</string>
 </resources>

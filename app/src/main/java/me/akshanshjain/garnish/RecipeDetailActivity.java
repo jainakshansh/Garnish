@@ -1,5 +1,6 @@
 package me.akshanshjain.garnish;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.content.ContextCompat;
@@ -10,6 +11,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -39,6 +43,8 @@ public class RecipeDetailActivity extends AppCompatActivity {
 
     private TextView ingredientsLabel;
     private RecyclerView ingredientsRecycler;
+    private Button showStepsButton;
+
     private ArrayList<IngredientItem> ingredientItemList;
     private IngredientsRecyclerAdapter ingredientsAdapter;
 
@@ -85,9 +91,25 @@ public class RecipeDetailActivity extends AppCompatActivity {
                 .load(recipeItem.getImageUrl())
                 .into(recipeImage);
 
+        //Setting the typefaces for the local views.
         ingredientsLabel = findViewById(R.id.ingredients_label_detail);
         ingredientsLabel.setTypeface(QLight);
 
+        showStepsButton = findViewById(R.id.show_steps_button);
+        showStepsButton.setTypeface(QLight);
+
+        showStepsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent detailedStepsIntent = new Intent(getApplicationContext(), StepDetailsActivity.class);
+                detailedStepsIntent.putParcelableArrayListExtra(STEPS_KEY, stepsItemList);
+                startActivity(detailedStepsIntent);
+            }
+        });
+
+        /*
+        Preparing the recycler view and setting up the ingredients list.
+        */
         settingIngredients();
         ingredientsAdapter.notifyDataSetChanged();
     }
