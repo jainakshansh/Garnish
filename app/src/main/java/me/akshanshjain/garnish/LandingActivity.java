@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -17,7 +16,6 @@ import android.support.v7.widget.SnapHelper;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,25 +26,23 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
-import com.facebook.shimmer.ShimmerFrameLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import me.akshanshjain.garnish.Adapters.RecipeAdapter;
 import me.akshanshjain.garnish.Objects.IngredientItem;
 import me.akshanshjain.garnish.Objects.RecipeItem;
 import me.akshanshjain.garnish.Objects.StepsItem;
 
-public class LandingActivity extends AppCompatActivity implements RecipeAdapter.RecipeItemClickListener {
+public class LandingActivity extends AppCompatActivity {
 
     private LinearLayout parentLayout;
     private Toolbar toolbar;
-    private Typeface qMed, qLight;
+    private Typeface QMed, QLight;
 
     private RecyclerView recipeRecycler;
     private RecipeAdapter recipeAdapter;
@@ -59,9 +55,6 @@ public class LandingActivity extends AppCompatActivity implements RecipeAdapter.
     private RequestQueue requestQueue;
     private JsonArrayRequest jsonArrayRequest;
     private static final String BASE_URL = "https://d17h27t6h515a5.cloudfront.net/topher/2017/May/59121517_baking/baking.json";
-    private static final String BUNDLE_KEY = "RECIPEINFO";
-    private static final String INGREDIENTS_KEY = "INGREDIENTSINFO";
-    private static final String STEPS_KEY = "STEPSINFO";
 
     //String constants for the Recipe JSON parsing.
     private static final String RECIPE_ID = "id";
@@ -105,14 +98,14 @@ public class LandingActivity extends AppCompatActivity implements RecipeAdapter.
     Initializing and Referencing views from XML.
      */
     private void initViews() {
-        qLight = Typeface.createFromAsset(getAssets(), "fonts/Quicksand-Light.ttf");
-        qMed = Typeface.createFromAsset(getAssets(), "fonts/Quicksand-Medium.ttf");
+        QLight = Typeface.createFromAsset(getAssets(), "fonts/Quicksand-Light.ttf");
+        QMed = Typeface.createFromAsset(getAssets(), "fonts/Quicksand-Medium.ttf");
 
         parentLayout = findViewById(R.id.parent_landing);
 
         recipeRecycler = findViewById(R.id.recycler_view_landing);
         recipeItemList = new ArrayList<>();
-        recipeAdapter = new RecipeAdapter(this, recipeItemList, this);
+        recipeAdapter = new RecipeAdapter(this, recipeItemList);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recipeRecycler.setLayoutManager(layoutManager);
@@ -250,6 +243,7 @@ public class LandingActivity extends AppCompatActivity implements RecipeAdapter.
 
                 //Adding all the recipe elements to an array list.
                 recipeItem = new RecipeItem(recipeID, recipeName, ingredientItemList, stepsItemList, servings, recipeImage, cookingTime);
+                Log.d("ADebug", ingredientItemList.size() + "\t" + stepsItemList.size());
                 recipeItemList.add(recipeItem);
             }
         } catch (JSONException e) {
@@ -291,15 +285,5 @@ public class LandingActivity extends AppCompatActivity implements RecipeAdapter.
                 return "2 hour 40 min";
         }
         return null;
-    }
-
-    @Override
-    public void onRecipeItemClickListener(int clickedItemIndex) {
-        Intent detailedIntent = new Intent(getApplicationContext(), RecipeDetailActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(BUNDLE_KEY, recipeItem);
-        bundle.putParcelableArrayList(INGREDIENTS_KEY, ingredientItemList);
-        bundle.putParcelableArrayList(STEPS_KEY, stepsItemList);
-        startActivity(detailedIntent);
     }
 }

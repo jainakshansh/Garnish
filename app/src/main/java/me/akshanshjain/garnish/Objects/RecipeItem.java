@@ -3,6 +3,7 @@ package me.akshanshjain.garnish.Objects;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,8 +11,8 @@ public class RecipeItem implements Parcelable {
 
     private int id;
     private String name;
-    private List<IngredientItem> ingredientItemList;
-    private List<StepsItem> stepsItemList;
+    private ArrayList<IngredientItem> ingredientItemList;
+    private ArrayList<StepsItem> stepsItemList;
     private int servings;
     private String imageUrl;
     private String cookingTime;
@@ -19,11 +20,11 @@ public class RecipeItem implements Parcelable {
     private RecipeItem() {
     }
 
-    public RecipeItem(int id, String name, List<IngredientItem> ingredientItemList, List<StepsItem> stepsItemList, int servings, String imageUrl, String cookingTime) {
+    public RecipeItem(int id, String name, ArrayList<IngredientItem> ingredientItemList, ArrayList<StepsItem> stepsItemList, int servings, String imageUrl, String cookingTime) {
         this.id = id;
         this.name = name;
-        this.ingredientItemList = new ArrayList<>();
-        this.stepsItemList = new ArrayList<>();
+        this.ingredientItemList = ingredientItemList;
+        this.stepsItemList = stepsItemList;
         this.servings = servings;
         this.imageUrl = imageUrl;
         this.cookingTime = cookingTime;
@@ -37,11 +38,11 @@ public class RecipeItem implements Parcelable {
         return name;
     }
 
-    public List<IngredientItem> getIngredientItemList() {
+    public ArrayList<IngredientItem> getIngredientItemList() {
         return ingredientItemList;
     }
 
-    public List<StepsItem> getStepsItemList() {
+    public ArrayList<StepsItem> getStepsItemList() {
         return stepsItemList;
     }
 
@@ -63,10 +64,6 @@ public class RecipeItem implements Parcelable {
     protected RecipeItem(Parcel in) {
         id = in.readInt();
         name = in.readString();
-        ingredientItemList = new ArrayList<>();
-        in.readList(ingredientItemList, IngredientItem.class.getClassLoader());
-        stepsItemList = new ArrayList<>();
-        in.readList(stepsItemList, StepsItem.class.getClassLoader());
         servings = in.readInt();
         imageUrl = in.readString();
         cookingTime = in.readString();
@@ -76,8 +73,6 @@ public class RecipeItem implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(id);
         dest.writeString(name);
-        dest.writeList(ingredientItemList);
-        dest.writeList(stepsItemList);
         dest.writeInt(servings);
         dest.writeString(imageUrl);
         dest.writeString(cookingTime);

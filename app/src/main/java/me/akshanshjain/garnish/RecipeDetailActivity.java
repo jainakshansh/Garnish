@@ -46,6 +46,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_detail);
 
+        //Typeface for the current activity.
         QLight = Typeface.createFromAsset(getAssets(), "fonts/Quicksand-Light.ttf");
 
         //Setting up the toolbar for the activity.
