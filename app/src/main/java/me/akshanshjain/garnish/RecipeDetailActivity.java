@@ -11,6 +11,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -37,9 +40,9 @@ public class RecipeDetailActivity extends AppCompatActivity {
     private Typeface QLight;
 
     private RecipeItem recipeItem;
-    private static final String BUNDLE_KEY = "RECIPEINFO";
-    private static final String INGREDIENTS_KEY = "INGREDIENTSINFO";
-    private static final String STEPS_KEY = "STEPSINFO";
+    private String BUNDLE_KEY = getResources().getString(R.string.BUNDLE_KEY);
+    private String INGREDIENTS_KEY = getResources().getString(R.string.INGREDIENTS_KEY);
+    private String STEPS_KEY = getResources().getString(R.string.STEPS_KEY);
 
     private TextView ingredientsLabel;
     private RecyclerView ingredientsRecycler;
@@ -111,7 +114,6 @@ public class RecipeDetailActivity extends AppCompatActivity {
         Preparing the recycler view and setting up the ingredients list.
         */
         settingIngredients();
-        ingredientsAdapter.notifyDataSetChanged();
     }
 
     /*
@@ -126,5 +128,25 @@ public class RecipeDetailActivity extends AppCompatActivity {
         ingredientsRecycler.setItemAnimator(new DefaultItemAnimator());
         ingredientsRecycler.setHasFixedSize(true);
         ingredientsRecycler.setAdapter(ingredientsAdapter);
+
+        //Updating the views after data binding.
+        ingredientsAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu_recipe_detail, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.add_to_widget:
+                //TODO Need to add code for adding current recipe to widget.
+                break;
+        }
+        return true;
     }
 }

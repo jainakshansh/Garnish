@@ -10,4 +10,8 @@
     <string name="ingredients">Ingredients</string>
     <string name="show_recipe">Show Recipe</string>
     <string name="show_steps">Show Steps</string>
+    <string name="BUNDLE_KEY">RECIPEINFO</string>
+    <string name="INGREDIENTS_KEY">INGREDIENTSINFO</string>
+    <string name="STEPS_KEY">STEPSINFO</string>
+    <string name="add_to_widget">Add to Widget</string>
 </resources>

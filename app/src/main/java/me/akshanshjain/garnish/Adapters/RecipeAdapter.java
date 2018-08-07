@@ -29,9 +29,9 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     private List<RecipeItem> recipeItemList;
     private Typeface QLight;
 
-    private static final String BUNDLE_KEY = "RECIPEINFO";
-    private static final String INGREDIENTS_KEY = "INGREDIENTSINFO";
-    private static final String STEPS_KEY = "STEPSINFO";
+    private String BUNDLE_KEY = context.getResources().getString(R.string.BUNDLE_KEY);
+    private String INGREDIENTS_KEY = context.getResources().getString(R.string.INGREDIENTS_KEY);
+    private String STEPS_KEY = context.getResources().getString(R.string.STEPS_KEY);
 
     public RecipeAdapter(Context context, List<RecipeItem> recipeItemList) {
         this.context = context;
