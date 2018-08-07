@@ -13,7 +13,8 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar_step_detail"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize" />
+            android:layout_height="?attr/actionBarSize"
+            android:theme="@style/ToolbarTheme" />
 
     </android.support.design.widget.AppBarLayout>
 

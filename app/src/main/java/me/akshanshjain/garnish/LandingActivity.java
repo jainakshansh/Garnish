@@ -173,7 +173,7 @@ public class LandingActivity extends AppCompatActivity {
                         }
                     }
                 });
-        snackbar.setActionTextColor(ContextCompat.getColor(this, R.color.colorAccent));
+        snackbar.setActionTextColor(ContextCompat.getColor(this, android.R.color.white));
         View snackbarView = snackbar.getView();
         TextView snackText = snackbarView.findViewById(android.support.design.R.id.snackbar_text);
         snackText.setTextColor(ContextCompat.getColor(this, android.R.color.white));

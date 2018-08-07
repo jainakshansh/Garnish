@@ -63,22 +63,29 @@ public class StepDetailFragment extends Fragment {
             simpleExoPlayer = ExoPlayerFactory.newSimpleInstance(getContext().getApplicationContext(), trackSelector, loadControl);
             simpleExoPlayerView.setPlayer(simpleExoPlayer);
 
-            //TODO Implement - Preparing the MediaSource.
-            /*
-            MediaSource mediaSource = new ExtractorMediaSource(mediaUri, new DefaultDataSourceFactory(),
+            //TODO Implement - Preparing the data source factory.
+            MediaSource mediaSource = new ExtractorMediaSource(mediaUri, null,
                     new DefaultExtractorsFactory(), null, null);
             simpleExoPlayer.prepare(mediaSource);
             simpleExoPlayer.setPlayWhenReady(true);
-            */
         }
     }
 
     /*
-    Releasing the Exo Player.
+    Code to release the Exo Player.
     */
     private void releasePlayer() {
         simpleExoPlayer.stop();
         simpleExoPlayer.release();
         simpleExoPlayer = null;
+    }
+
+    /*
+    Releasing the player when the fragment is destroyed.
+    */
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        releasePlayer();
     }
 }

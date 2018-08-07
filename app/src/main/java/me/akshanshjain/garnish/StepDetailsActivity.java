@@ -20,10 +20,6 @@ public class StepDetailsActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar_step_detail);
         setSupportActionBar(toolbar);
 
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
-
         //Creating a new StepsListFragment instance.
         StepsListFragment stepsListFragment = new StepsListFragment();
 

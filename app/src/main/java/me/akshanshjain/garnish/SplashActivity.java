@@ -43,6 +43,6 @@ public class SplashActivity extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(), LandingActivity.class));
                 finish();
             }
-        }, 3000);
+        }, 2000);
     }
 }

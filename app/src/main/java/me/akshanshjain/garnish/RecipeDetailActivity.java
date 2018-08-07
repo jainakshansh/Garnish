@@ -40,9 +40,9 @@ public class RecipeDetailActivity extends AppCompatActivity {
     private Typeface QLight;
 
     private RecipeItem recipeItem;
-    private String BUNDLE_KEY = getResources().getString(R.string.BUNDLE_KEY);
-    private String INGREDIENTS_KEY = getResources().getString(R.string.INGREDIENTS_KEY);
-    private String STEPS_KEY = getResources().getString(R.string.STEPS_KEY);
+    private static final String BUNDLE_KEY = "RECIPEINFO";
+    private static final String INGREDIENTS_KEY = "INGREDIENTSINFO";
+    private static final String STEPS_KEY = "STEPSINFO";
 
     private TextView ingredientsLabel;
     private RecyclerView ingredientsRecycler;
@@ -80,7 +80,9 @@ public class RecipeDetailActivity extends AppCompatActivity {
 
         //Setting collapsing toolbar layout title.
         collapsingToolbarLayout = findViewById(R.id.ctl_recipe_detail);
-        collapsingToolbarLayout.setTitle(recipeItem.getName());
+        if (getIntent().getExtras() != null) {
+            collapsingToolbarLayout.setTitle(recipeItem.getName());
+        }
 
         //Customizing the Collapsing Toolbar appearance.
         collapsingToolbarLayout.setCollapsedTitleTypeface(QLight);
@@ -127,6 +129,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
         ingredientsRecycler.setLayoutManager(layoutManager);
         ingredientsRecycler.setItemAnimator(new DefaultItemAnimator());
         ingredientsRecycler.setHasFixedSize(true);
+        ingredientsRecycler.setNestedScrollingEnabled(false);
         ingredientsRecycler.setAdapter(ingredientsAdapter);
 
         //Updating the views after data binding.
