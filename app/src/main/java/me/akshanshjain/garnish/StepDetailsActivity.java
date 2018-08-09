@@ -28,14 +28,6 @@ public class StepDetailsActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar_step_detail);
         setSupportActionBar(toolbar);
 
-        Intent stepsIntent = getIntent();
-        if (stepsIntent.getExtras() != null) {
-            stepsItemArrayList = stepsIntent.getParcelableArrayListExtra("STEPSINFO");
-        }
-
-        //Creating a new StepsListFragment instance.
-        StepsListFragment stepsListFragment = new StepsListFragment();
-
         //Using a fragment manager and transaction to add fragment to the screen.
         FragmentManager fragmentManager = getSupportFragmentManager();
 

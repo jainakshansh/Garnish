@@ -24,18 +24,10 @@ public class StepsListFragment extends Fragment {
     private ArrayList<StepsItem> stepsItemList;
     private StepsRecyclerAdapter adapter;
 
-    private static final String INGREDIENTS_KEY = "INGREDIENTSINFO";
+    private static final String STEPS_KEY = "STEPSINFO";
 
     //Mandatory constructor for instantiating a fragment.
     public StepsListFragment() {
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            stepsItemList = getArguments().getParcelableArrayList(INGREDIENTS_KEY);
-        }
     }
 
     /*
@@ -47,12 +39,18 @@ public class StepsListFragment extends Fragment {
         //Inflating the layout into the view.
         View rootView = inflater.inflate(R.layout.fragment_steps_list, container, false);
 
+        if (getArguments() != null) {
+            stepsItemList = getArguments().getParcelableArrayList(STEPS_KEY);
+        }
+
         //Setting up the recycler view.
         stepsRecycler = rootView.findViewById(R.id.steps_list_recycler);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext().getApplicationContext());
         stepsRecycler.setLayoutManager(layoutManager);
         stepsRecycler.setItemAnimator(new DefaultItemAnimator());
         stepsRecycler.setHasFixedSize(true);
+
+        Log.d("ADebug", "Testing size: " + stepsItemList.size());
 
         //Setting the adapter to the recycler view.
         stepsItemList = new ArrayList<>();

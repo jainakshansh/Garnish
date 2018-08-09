@@ -14,13 +14,13 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar_step_list"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize" />
+            android:layout_height="?android:attr/actionBarSize"
+            android:theme="@style/ToolbarTheme" />
 
     </android.support.design.widget.AppBarLayout>
 
-    <fragment
-        android:id="@+id/master_list_fragment"
-        android:name="me.akshanshjain.garnish.Fragments.StepsListFragment"
+    <FrameLayout
+        android:id="@+id/steps_list_frame_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

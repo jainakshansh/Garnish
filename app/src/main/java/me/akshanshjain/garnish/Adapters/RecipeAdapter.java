@@ -102,14 +102,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
                 detailedRecipeIntent.putExtra(BUNDLE_KEY, recipeItem);
                 detailedRecipeIntent.putParcelableArrayListExtra(INGREDIENTS_KEY, new ArrayList<Parcelable>(recipeItemList.get(holder.getAdapterPosition()).getIngredientItemList()));
                 detailedRecipeIntent.putParcelableArrayListExtra(STEPS_KEY, new ArrayList<Parcelable>(recipeItemList.get(holder.getAdapterPosition()).getStepsItemList()));
-
-                //Sending the data to the fragment too.
-                Bundle bundle = new Bundle();
-                bundle.putParcelableArrayList(INGREDIENTS_KEY, new ArrayList<Parcelable>(recipeItemList.get(holder.getAdapterPosition()).getIngredientItemList()));
-                //Setting fragments arguments.
-                StepsListFragment stepsListFragment = new StepsListFragment();
-                stepsListFragment.setArguments(bundle);
-
                 context.startActivity(detailedRecipeIntent);
             }
         });

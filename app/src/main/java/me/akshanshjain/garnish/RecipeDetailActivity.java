@@ -27,6 +27,7 @@ import java.util.List;
 
 import me.akshanshjain.garnish.Adapters.IngredientsRecyclerAdapter;
 import me.akshanshjain.garnish.Adapters.RecipeAdapter;
+import me.akshanshjain.garnish.Fragments.StepsListFragment;
 import me.akshanshjain.garnish.Objects.IngredientItem;
 import me.akshanshjain.garnish.Objects.RecipeItem;
 import me.akshanshjain.garnish.Objects.StepsItem;
@@ -43,6 +44,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
     private static final String BUNDLE_KEY = "RECIPEINFO";
     private static final String INGREDIENTS_KEY = "INGREDIENTSINFO";
     private static final String STEPS_KEY = "STEPSINFO";
+    private static final String RECIPE_NAME = "RECIPENAME";
 
     private TextView ingredientsLabel;
     private RecyclerView ingredientsRecycler;
@@ -106,8 +108,11 @@ public class RecipeDetailActivity extends AppCompatActivity {
         showStepsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent detailedStepsIntent = new Intent(getApplicationContext(), StepDetailsActivity.class);
+                Intent detailedStepsIntent = new Intent(getApplicationContext(), StepListActivity.class);
+                detailedStepsIntent.putExtra(RECIPE_NAME, recipeItem.getName());
                 detailedStepsIntent.putParcelableArrayListExtra(STEPS_KEY, stepsItemList);
+
+                //Starting the activity.
                 startActivity(detailedStepsIntent);
             }
         });
