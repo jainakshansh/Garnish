@@ -3,6 +3,7 @@ package me.akshanshjain.garnish.Adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -19,6 +20,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.akshanshjain.garnish.Fragments.StepsListFragment;
 import me.akshanshjain.garnish.Objects.RecipeItem;
 import me.akshanshjain.garnish.R;
 import me.akshanshjain.garnish.RecipeDetailActivity;
@@ -100,6 +102,14 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
                 detailedRecipeIntent.putExtra(BUNDLE_KEY, recipeItem);
                 detailedRecipeIntent.putParcelableArrayListExtra(INGREDIENTS_KEY, new ArrayList<Parcelable>(recipeItemList.get(holder.getAdapterPosition()).getIngredientItemList()));
                 detailedRecipeIntent.putParcelableArrayListExtra(STEPS_KEY, new ArrayList<Parcelable>(recipeItemList.get(holder.getAdapterPosition()).getStepsItemList()));
+
+                //Sending the data to the fragment too.
+                Bundle bundle = new Bundle();
+                bundle.putParcelableArrayList(INGREDIENTS_KEY, new ArrayList<Parcelable>(recipeItemList.get(holder.getAdapterPosition()).getIngredientItemList()));
+                //Setting fragments arguments.
+                StepsListFragment stepsListFragment = new StepsListFragment();
+                stepsListFragment.setArguments(bundle);
+
                 context.startActivity(detailedRecipeIntent);
             }
         });

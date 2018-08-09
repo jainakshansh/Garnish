@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,8 +24,18 @@ public class StepsListFragment extends Fragment {
     private ArrayList<StepsItem> stepsItemList;
     private StepsRecyclerAdapter adapter;
 
+    private static final String INGREDIENTS_KEY = "INGREDIENTSINFO";
+
     //Mandatory constructor for instantiating a fragment.
     public StepsListFragment() {
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            stepsItemList = getArguments().getParcelableArrayList(INGREDIENTS_KEY);
+        }
     }
 
     /*

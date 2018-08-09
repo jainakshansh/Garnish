@@ -1,15 +1,23 @@
 package me.akshanshjain.garnish;
 
+import android.content.Intent;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.widget.Toast;
+
+import com.google.android.exoplayer2.util.Util;
+
+import java.util.ArrayList;
 
 import me.akshanshjain.garnish.Fragments.StepsListFragment;
+import me.akshanshjain.garnish.Objects.StepsItem;
 
 public class StepDetailsActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
+    private ArrayList<StepsItem> stepsItemArrayList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +27,11 @@ public class StepDetailsActivity extends AppCompatActivity {
         //Setting up the toolbar activity.
         toolbar = findViewById(R.id.toolbar_step_detail);
         setSupportActionBar(toolbar);
+
+        Intent stepsIntent = getIntent();
+        if (stepsIntent.getExtras() != null) {
+            stepsItemArrayList = stepsIntent.getParcelableArrayListExtra("STEPSINFO");
+        }
 
         //Creating a new StepsListFragment instance.
         StepsListFragment stepsListFragment = new StepsListFragment();
