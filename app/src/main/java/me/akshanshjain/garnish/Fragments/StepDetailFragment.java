@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -34,6 +35,8 @@ public class StepDetailFragment extends Fragment {
     private SimpleExoPlayerView simpleExoPlayerView;
     private ArrayList<StepsItem> stepsItemArrayList;
 
+    private TextView description;
+
     //Mandatory constructor for instantiating the fragment.
     public StepDetailFragment() {
     }
@@ -53,6 +56,8 @@ public class StepDetailFragment extends Fragment {
 
         simpleExoPlayerView = rootView.findViewById(R.id.simple_exo_player_step_detail);
         stepsItemArrayList = new ArrayList<>();
+
+        description = rootView.findViewById(R.id.step_description_detail);
 
         //Testing the working of the player.
         initializePlayer(Uri.parse("https://d17h27t6h515a5.cloudfront.net/topher/2017/April/58ffdc33_-intro-brownies/-intro-brownies.mp4"));

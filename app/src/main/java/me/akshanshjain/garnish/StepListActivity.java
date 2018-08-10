@@ -21,6 +21,8 @@ public class StepListActivity extends AppCompatActivity implements StepsListFrag
     private ArrayList<StepsItem> stepsItemArrayList;
     private String recipeName;
 
+    private static final String CLICKED_POSITION = "CLICKEDPOSITION";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +32,9 @@ public class StepListActivity extends AppCompatActivity implements StepsListFrag
         Toolbar toolbar = findViewById(R.id.toolbar_step_list);
         setSupportActionBar(toolbar);
 
+        /*
+        Getting the list and name from the Recipe Detail Activity.
+        */
         Intent intent = getIntent();
         if (intent.getExtras() != null) {
             recipeName = intent.getStringExtra(RECIPE_NAME);
@@ -51,10 +56,16 @@ public class StepListActivity extends AppCompatActivity implements StepsListFrag
                 .commit();
     }
 
-
+    /*
+    Receiving the information from the Step List Fragment.
+    Information includes the position of the item clicked in the recycler view.
+    */
     @Override
     public void onStepItemClicked(int position) {
-        Toast.makeText(this, "" + position, Toast.LENGTH_SHORT).show();
+        Intent detailedIntent = new Intent(getApplicationContext(), StepDetailsActivity.class);
+        detailedIntent.putExtra(CLICKED_POSITION, position);
+        detailedIntent.putParcelableArrayListExtra(STEPS_KEY, stepsItemArrayList);
+        startActivity(detailedIntent);
     }
 }
 
