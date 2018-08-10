@@ -7,13 +7,14 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import me.akshanshjain.garnish.Fragments.StepsListFragment;
 import me.akshanshjain.garnish.Objects.StepsItem;
 
-public class StepListActivity extends AppCompatActivity {
+public class StepListActivity extends AppCompatActivity implements StepsListFragment.OnStepClickListener {
 
     private static final String STEPS_KEY = "STEPSINFO";
     private static final String RECIPE_NAME = "RECIPENAME";
@@ -48,6 +49,12 @@ public class StepListActivity extends AppCompatActivity {
         fragmentManager.beginTransaction()
                 .replace(R.id.steps_list_frame_layout, stepsListFragment)
                 .commit();
+    }
+
+
+    @Override
+    public void onStepItemClicked(int position) {
+        Toast.makeText(this, "" + position, Toast.LENGTH_SHORT).show();
     }
 }
 

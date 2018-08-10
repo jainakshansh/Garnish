@@ -22,10 +22,11 @@
             android:id="@+id/step_number"
             android:layout_width="64dp"
             android:layout_height="64dp"
+            android:layout_gravity="center"
             android:background="@drawable/circle_text"
             android:gravity="center"
             android:textColor="@color/chocolateBrown"
-            android:textSize="30sp" />
+            android:textSize="28sp" />
 
         <TextView
             android:id="@+id/step_short_desc"

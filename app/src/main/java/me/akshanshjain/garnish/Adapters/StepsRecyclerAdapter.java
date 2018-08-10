@@ -19,14 +19,19 @@ public class StepsRecyclerAdapter extends RecyclerView.Adapter<StepsRecyclerAdap
     private Context context;
     private ArrayList<StepsItem> stepsItemList;
     private Typeface QLight;
+    private StepItemClickListener itemClickListener;
 
-    public StepsRecyclerAdapter(Context context, ArrayList<StepsItem> stepsItemList) {
+    /*
+    Constructor with the click listener as a parameter.
+    */
+    public StepsRecyclerAdapter(Context context, ArrayList<StepsItem> stepsItemList, StepItemClickListener itemClickListener) {
         this.context = context;
         this.stepsItemList = stepsItemList;
+        this.itemClickListener = itemClickListener;
         QLight = Typeface.createFromAsset(context.getAssets(), "fonts/Quicksand-Light.ttf");
     }
 
-    public class StepsViewHolder extends RecyclerView.ViewHolder {
+    public class StepsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView stepNumberTv, stepShortDescTv;
 
@@ -34,6 +39,18 @@ public class StepsRecyclerAdapter extends RecyclerView.Adapter<StepsRecyclerAdap
             super(view);
             stepNumberTv = view.findViewById(R.id.step_number);
             stepShortDescTv = view.findViewById(R.id.step_short_desc);
+
+            itemView.setOnClickListener(this);
+        }
+
+        /*
+        Getting the item clicked and passing it to the listener.
+        The position is retrieved using an inbuilt function.
+        */
+        @Override
+        public void onClick(View view) {
+            int clickedPos = getAdapterPosition();
+            itemClickListener.onStepItemClickListener(clickedPos);
         }
     }
 
@@ -49,7 +66,7 @@ public class StepsRecyclerAdapter extends RecyclerView.Adapter<StepsRecyclerAdap
         StepsItem stepsItem = stepsItemList.get(position);
 
         holder.stepNumberTv.setTypeface(QLight);
-        holder.stepNumberTv.setText(position);
+        holder.stepNumberTv.setText(String.valueOf(stepsItem.getId()));
 
         holder.stepShortDescTv.setTypeface(QLight);
         holder.stepShortDescTv.setText(stepsItem.getShortDesc());
@@ -58,5 +75,12 @@ public class StepsRecyclerAdapter extends RecyclerView.Adapter<StepsRecyclerAdap
     @Override
     public int getItemCount() {
         return stepsItemList.size();
+    }
+
+    /*
+    Creating an interface to send the clicked item position to the activity.
+    */
+    public interface StepItemClickListener {
+        void onStepItemClickListener(int clickedItemIndex);
     }
 }
