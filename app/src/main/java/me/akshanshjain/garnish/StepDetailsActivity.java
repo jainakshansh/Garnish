@@ -42,10 +42,18 @@ public class StepDetailsActivity extends AppCompatActivity {
         //Setting up the toolbar activity.
         toolbar = findViewById(R.id.toolbar_step_detail);
         setSupportActionBar(toolbar);
+
+        //Setting the step description as the title in the toolbar.
         getSupportActionBar().setTitle(stepsItemArrayList.get(clickedPosition).getShortDesc());
 
         //Initiating the fragment to be added to the layout.
         StepDetailFragment stepDetailFragment = new StepDetailFragment();
+
+        //Sending the data to the fragment for setting into the containers.
+        Bundle arguments = new Bundle();
+        arguments.putParcelableArrayList(STEPS_KEY, stepsItemArrayList);
+        arguments.putInt(CLICKED_POSITION, clickedPosition);
+        stepDetailFragment.setArguments(arguments);
 
         //Using a fragment manager and transaction to add fragment to the screen.
         FragmentManager fragmentManager = getSupportFragmentManager();

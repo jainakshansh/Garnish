@@ -1,5 +1,6 @@
 package me.akshanshjain.garnish.Fragments;
 
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -31,19 +32,19 @@ import me.akshanshjain.garnish.R;
 
 public class StepDetailFragment extends Fragment {
 
+    private Typeface QLight;
+
     private SimpleExoPlayer simpleExoPlayer;
     private SimpleExoPlayerView simpleExoPlayerView;
     private ArrayList<StepsItem> stepsItemArrayList;
 
     private TextView description;
+    private static final String STEPS_KEY = "STEPSINFO";
+    private static final String CLICKED_POSITION = "CLICKEDPOSITION";
+    private int clickedPosition;
 
     //Mandatory constructor for instantiating the fragment.
     public StepDetailFragment() {
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
     }
 
     /*
@@ -54,14 +55,35 @@ public class StepDetailFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_step_detail, container, false);
 
+        /*
+        Custom Typeface for all views with texts.
+        */
+        QLight = Typeface.createFromAsset(getContext().getAssets(), "fonts/Quicksand-Light.ttf");
+
         simpleExoPlayerView = rootView.findViewById(R.id.simple_exo_player_step_detail);
         stepsItemArrayList = new ArrayList<>();
 
+        /*
+        Getting the data from the host activity.
+        */
+        if (getArguments() != null) {
+            stepsItemArrayList = getArguments().getParcelableArrayList(STEPS_KEY);
+            clickedPosition = getArguments().getInt(CLICKED_POSITION);
+        }
+
+        //Setting the description text.
         description = rootView.findViewById(R.id.step_description_detail);
+        description.setTypeface(QLight);
+        description.setText(stepsItemArrayList.get(clickedPosition).getDescription());
 
-        //Testing the working of the player.
-        initializePlayer(Uri.parse("https://d17h27t6h515a5.cloudfront.net/topher/2017/April/58ffdc33_-intro-brownies/-intro-brownies.mp4"));
+        //Setting the uri details into the player.
+        if (stepsItemArrayList.get(clickedPosition).getVideoUrl() != null) {
+            initializePlayer(Uri.parse(stepsItemArrayList.get(clickedPosition).getVideoUrl()));
+        } else if (stepsItemArrayList.get(clickedPosition).getThumbnailUrl() != null) {
+            initializePlayer(Uri.parse(stepsItemArrayList.get(clickedPosition).getThumbnailUrl()));
+        }
 
+        //Returning the root view.
         return rootView;
     }
 
@@ -71,13 +93,15 @@ public class StepDetailFragment extends Fragment {
     */
     private void initializePlayer(Uri mediaUri) {
         if (simpleExoPlayer == null) {
+
             //Creating an instance of the ExoPlayer.
             TrackSelector trackSelector = new DefaultTrackSelector();
             LoadControl loadControl = new DefaultLoadControl();
 
-            simpleExoPlayer = ExoPlayerFactory.newSimpleInstance(getContext().getApplicationContext(), trackSelector, loadControl);
+            simpleExoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector, loadControl);
             simpleExoPlayerView.setPlayer(simpleExoPlayer);
 
+            //Preparing the MediaSource.
             String userAgent = Util.getUserAgent(getContext(), "Garnish");
             MediaSource mediaSource = new ExtractorMediaSource(mediaUri, new DefaultDataSourceFactory(getContext(), userAgent),
                     new DefaultExtractorsFactory(), null, null);

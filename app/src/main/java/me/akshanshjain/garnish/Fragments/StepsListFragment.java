@@ -60,6 +60,9 @@ public class StepsListFragment extends Fragment implements StepsRecyclerAdapter.
 
         stepsItemList = new ArrayList<>();
 
+        /*
+        Getting the data from the host activity.
+        */
         if (getArguments() != null) {
             stepsItemList = getArguments().getParcelableArrayList(STEPS_KEY);
         }
