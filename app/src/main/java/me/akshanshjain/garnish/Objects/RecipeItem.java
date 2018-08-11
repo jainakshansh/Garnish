@@ -1,14 +1,20 @@
 package me.akshanshjain.garnish.Objects;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity(tableName = "recipes")
 public class RecipeItem implements Parcelable {
 
+    @PrimaryKey
+    @NonNull
     private int id;
     private String name;
     private ArrayList<IngredientItem> ingredientItemList;

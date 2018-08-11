@@ -3,11 +3,9 @@ package me.akshanshjain.garnish.Adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,10 +18,9 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.akshanshjain.garnish.Fragments.StepsListFragment;
 import me.akshanshjain.garnish.Objects.RecipeItem;
 import me.akshanshjain.garnish.R;
-import me.akshanshjain.garnish.RecipeDetailActivity;
+import me.akshanshjain.garnish.Activities.RecipeDetailActivity;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder> {
 

@@ -1,9 +1,11 @@
-package me.akshanshjain.garnish;
+package me.akshanshjain.garnish.Widget;
 
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.widget.RemoteViews;
+
+import me.akshanshjain.garnish.R;
 
 /**
  * Implementation of App Widget functionality.

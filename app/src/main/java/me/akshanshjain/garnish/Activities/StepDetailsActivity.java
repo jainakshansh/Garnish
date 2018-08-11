@@ -1,4 +1,4 @@
-package me.akshanshjain.garnish;
+package me.akshanshjain.garnish.Activities;
 
 import android.content.Intent;
 import android.support.v4.app.FragmentManager;
@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import me.akshanshjain.garnish.Fragments.StepDetailFragment;
 import me.akshanshjain.garnish.Fragments.StepsListFragment;
 import me.akshanshjain.garnish.Objects.StepsItem;
+import me.akshanshjain.garnish.R;
 
 public class StepDetailsActivity extends AppCompatActivity {
 

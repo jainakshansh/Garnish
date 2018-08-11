@@ -1,10 +1,8 @@
-package me.akshanshjain.garnish;
+package me.akshanshjain.garnish.Activities;
 
-import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -15,7 +13,6 @@ import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -38,6 +35,7 @@ import me.akshanshjain.garnish.Adapters.RecipeAdapter;
 import me.akshanshjain.garnish.Objects.IngredientItem;
 import me.akshanshjain.garnish.Objects.RecipeItem;
 import me.akshanshjain.garnish.Objects.StepsItem;
+import me.akshanshjain.garnish.R;
 
 public class LandingActivity extends AppCompatActivity {
 

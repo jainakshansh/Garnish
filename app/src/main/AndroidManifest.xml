@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".SplashActivity"
+            android:name=".Activities.SplashActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,18 +21,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LandingActivity" />
+        <activity android:name=".Activities.LandingActivity" />
         <activity
-            android:name=".RecipeDetailActivity"
-            android:parentActivityName=".LandingActivity" />
+            android:name=".Activities.RecipeDetailActivity"
+            android:parentActivityName=".Activities.LandingActivity" />
         <activity
-            android:name=".StepListActivity"
-            android:parentActivityName=".RecipeDetailActivity" />
+            android:name=".Activities.StepListActivity"
+            android:parentActivityName=".Activities.RecipeDetailActivity" />
         <activity
-            android:name=".StepDetailsActivity"
-            android:parentActivityName=".StepListActivity" />
+            android:name=".Activities.StepDetailsActivity"
+            android:parentActivityName=".Activities.StepListActivity" />
 
-        <receiver android:name=".GarnishRecipeWidget">
+        <receiver android:name=".Widget.GarnishRecipeWidget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>

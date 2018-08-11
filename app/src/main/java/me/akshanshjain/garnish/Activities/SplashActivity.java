@@ -1,8 +1,7 @@
-package me.akshanshjain.garnish;
+package me.akshanshjain.garnish.Activities;
 
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.graphics.drawable.Animatable;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,6 +10,8 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
+
+import me.akshanshjain.garnish.R;
 
 public class SplashActivity extends AppCompatActivity {
 

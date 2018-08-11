@@ -1,4 +1,4 @@
-package me.akshanshjain.garnish;
+package me.akshanshjain.garnish.Activities;
 
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -10,11 +10,9 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -23,14 +21,12 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import me.akshanshjain.garnish.Adapters.IngredientsRecyclerAdapter;
-import me.akshanshjain.garnish.Adapters.RecipeAdapter;
-import me.akshanshjain.garnish.Fragments.StepsListFragment;
 import me.akshanshjain.garnish.Objects.IngredientItem;
 import me.akshanshjain.garnish.Objects.RecipeItem;
 import me.akshanshjain.garnish.Objects.StepsItem;
+import me.akshanshjain.garnish.R;
 
 public class RecipeDetailActivity extends AppCompatActivity {
 
