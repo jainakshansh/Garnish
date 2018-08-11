@@ -11,4 +11,6 @@
     <string name="show_recipe">Show Recipe</string>
     <string name="show_steps">Show Steps</string>
     <string name="add_to_widget">Add to Widget</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
 </resources>
