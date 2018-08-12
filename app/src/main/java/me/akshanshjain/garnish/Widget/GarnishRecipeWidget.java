@@ -64,10 +64,9 @@ public class GarnishRecipeWidget extends AppWidgetProvider {
         views.setOnClickPendingIntent(R.id.show_recipe_widget, pendingIntent);
 
         SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_KEY, Context.MODE_PRIVATE);
-        if (sharedPreferences.getBoolean("ISFAV", false)) {
-            recipeName = sharedPreferences.getString("NAME", "");
-            ingredientString = sharedPreferences.getString("INGREDS", "");
-        }
+        recipeName = sharedPreferences.getString("NAME", "");
+        ingredientString = sharedPreferences.getString("INGREDS", "");
+
 
         views.setTextViewText(R.id.recipe_name_widget, recipeName);
         views.setTextViewText(R.id.ingredients_widget, ingredientString);

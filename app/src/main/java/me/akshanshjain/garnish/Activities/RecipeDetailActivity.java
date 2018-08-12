@@ -169,17 +169,12 @@ public class RecipeDetailActivity extends AppCompatActivity {
         }
 
         SharedPreferences sharedPreferences = getSharedPreferences(PREF_KEY, MODE_PRIVATE);
-        boolean favorite = sharedPreferences.getBoolean("ISFAV", false);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("NAME", recipeItem.getName());
         editor.putString("INGREDS", ingredientsAll.toString());
-        if (!favorite) {
-            editor.putBoolean("ISFAV", true);
-        } else {
-            editor.putBoolean("ISFAV", false);
-        }
         editor.apply();
 
-        Toast.makeText(this, "Recipe added to Widget!", Toast.LENGTH_SHORT).show();
+        //Notifying user about the recipe added to the widget.
+        Toast.makeText(this, "Recipe added to widget!", Toast.LENGTH_LONG).show();
     }
 }

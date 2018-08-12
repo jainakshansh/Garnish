@@ -14,15 +14,6 @@
         android:textSize="24sp" />
 
     <TextView
-        android:id="@+id/ingredients_label_widget"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/widget_margin"
-        android:text="@string/ingredients"
-        android:textColor="@android:color/white"
-        android:textSize="18sp" />
-
-    <TextView
         android:id="@+id/ingredients_widget"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -36,9 +27,10 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:background="@drawable/button_border_filled"
-        android:padding="@dimen/widget_margin"
+        android:paddingBottom="8dp"
         android:paddingEnd="32dp"
         android:paddingStart="32dp"
+        android:paddingTop="8dp"
         android:text="@string/show_recipe"
         android:textColor="@color/chocolateBrown" />
 
