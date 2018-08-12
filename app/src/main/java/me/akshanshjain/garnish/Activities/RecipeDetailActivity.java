@@ -1,8 +1,10 @@
 package me.akshanshjain.garnish.Activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,6 +19,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -41,10 +44,12 @@ public class RecipeDetailActivity extends AppCompatActivity {
     private static final String INGREDIENTS_KEY = "INGREDIENTSINFO";
     private static final String STEPS_KEY = "STEPSINFO";
     private static final String RECIPE_NAME = "RECIPENAME";
+    private static final String PREF_KEY = "RECIPEFAV";
 
     private TextView ingredientsLabel;
     private RecyclerView ingredientsRecycler;
     private Button showStepsButton;
+    private FloatingActionButton fab;
 
     private ArrayList<IngredientItem> ingredientItemList;
     private IngredientsRecyclerAdapter ingredientsAdapter;
@@ -117,6 +122,18 @@ public class RecipeDetailActivity extends AppCompatActivity {
         Preparing the recycler view and setting up the ingredients list.
         */
         settingIngredients();
+
+        /*
+        Saving the ingredients in the shared preference as strings.
+        This information will be used to update the widgets.
+        */
+        fab = findViewById(R.id.fab_recipe_favorite);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addToFavorite();
+            }
+        });
     }
 
     /*
@@ -137,20 +154,32 @@ public class RecipeDetailActivity extends AppCompatActivity {
         ingredientsAdapter.notifyDataSetChanged();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.menu_recipe_detail, menu);
-        return true;
-    }
+    /*
+    This function creates a shared preference and saves or deletes the recipe information.
+    This information will be used to display recipe ingredients in the home screen widget.
+    */
+    private void addToFavorite() {
+        StringBuilder ingredientsAll = new StringBuilder();
+        for (int i = 0; i < ingredientItemList.size(); i++) {
+            String quantity = String.valueOf(ingredientItemList.get(i).getQuantity());
+            String measure = ingredientItemList.get(i).getMeasure();
+            String ingredient = ingredientItemList.get(i).getIngredient();
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.add_to_widget:
-                //TODO Need to add code for adding current recipe to widget.
-                break;
+            ingredientsAll.append(quantity).append(" ").append(measure).append(" ").append(ingredient).append("\n");
         }
-        return true;
+
+        SharedPreferences sharedPreferences = getSharedPreferences(PREF_KEY, MODE_PRIVATE);
+        boolean favorite = sharedPreferences.getBoolean("ISFAV", false);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("NAME", recipeItem.getName());
+        editor.putString("INGREDS", ingredientsAll.toString());
+        if (!favorite) {
+            editor.putBoolean("ISFAV", true);
+        } else {
+            editor.putBoolean("ISFAV", false);
+        }
+        editor.apply();
+
+        Toast.makeText(this, "Recipe added to Widget!", Toast.LENGTH_SHORT).show();
     }
 }
