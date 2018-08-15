@@ -28,6 +28,9 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     private List<RecipeItem> recipeItemList;
     private Typeface QLight;
 
+    /*
+    P
+    */
     private static final String BUNDLE_KEY = "RECIPEINFO";
     private static final String INGREDIENTS_KEY = "INGREDIENTSINFO";
     private static final String STEPS_KEY = "STEPSINFO";
@@ -47,6 +50,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
 
         public RecipeViewHolder(View view) {
             super(view);
+            //Referencing all the view from the XML to the inflated layout.
             recipeImage = view.findViewById(R.id.recipe_image);
             recipeName = view.findViewById(R.id.recipe_name);
             recipeTime = view.findViewById(R.id.recipe_time);
@@ -59,12 +63,27 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     @NonNull
     @Override
     public RecipeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recipe_item_layout, parent, false);
+        View view;
+        /*
+        Checking for the landscape and portrait mode layouts.
+        Changed the placements of child views with simple Linear Layout weight separation.
+        Constant '1' is set for Portrait and '2' is set for Landscape.
+        */
+        if (context.getResources().getConfiguration().orientation == 1) {
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recipe_item_layout, parent, false);
+        } else {
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recipe_item_layout_land, parent, false);
+        }
+
+        /*
+        Returning the inflated layout set into view to the view holder.
+        */
         return new RecipeViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull final RecipeViewHolder holder, int position) {
+        //Getting the recipe items details from the list at the current adapter position.
         final RecipeItem recipeItem = recipeItemList.get(holder.getAdapterPosition());
 
         //Loading the image of the recipe.
