@@ -34,28 +34,6 @@ public class StepListActivity extends AppCompatActivity implements StepsListFrag
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_step_list);
 
-        if (findViewById(R.id.two_pane_linear_layout) != null) {
-            mTwoPane = true;
-            //Initiating the fragment to be added to the layout.
-            StepDetailFragment stepDetailFragment = new StepDetailFragment();
-
-            //Sending the data to the fragment for setting into the containers.
-            Bundle arguments = new Bundle();
-            arguments.putParcelableArrayList(STEPS_KEY, stepsItemArrayList);
-            arguments.putInt(CLICKED_POSITION, clickedPosition);
-            stepDetailFragment.setArguments(arguments);
-
-            //Using a fragment manager and transaction to add fragment to the screen.
-            FragmentManager fragmentManager = getSupportFragmentManager();
-
-            //Fragment transaction.
-            fragmentManager.beginTransaction()
-                    .add(R.id.step_detail_frame_layout, stepDetailFragment)
-                    .commit();
-        } else {
-            mTwoPane = false;
-        }
-
         //Setting up the toolbar for the activity.
         Toolbar toolbar = findViewById(R.id.toolbar_step_list);
         setSupportActionBar(toolbar);
@@ -68,7 +46,10 @@ public class StepListActivity extends AppCompatActivity implements StepsListFrag
             recipeName = intent.getStringExtra(RECIPE_NAME);
             stepsItemArrayList = intent.getParcelableArrayListExtra(STEPS_KEY);
         }
-        getSupportActionBar().setTitle(recipeName);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(recipeName);
+        }
 
         StepsListFragment stepsListFragment = new StepsListFragment();
 
@@ -82,6 +63,33 @@ public class StepListActivity extends AppCompatActivity implements StepsListFrag
         fragmentManager.beginTransaction()
                 .replace(R.id.steps_list_frame_layout, stepsListFragment)
                 .commit();
+
+        /*
+        This conditional statement sets the UI w.r.t. mobile or tablet.
+        Creating a flexible layout here.
+        Also, sends the required data to be updated into the containers.
+        */
+        if (findViewById(R.id.two_pane_linear_layout) != null) {
+            mTwoPane = true;
+            //Initiating the fragment to be added to the layout.
+            StepDetailFragment stepDetailFragment = new StepDetailFragment();
+
+            //Sending the data to the fragment for setting into the containers.
+            Bundle bundle = new Bundle();
+            bundle.putParcelableArrayList(STEPS_KEY, stepsItemArrayList);
+            bundle.putInt(CLICKED_POSITION, clickedPosition);
+            stepDetailFragment.setArguments(bundle);
+
+            //Using a fragment manager and transaction to add fragment to the screen.
+            FragmentManager fm = getSupportFragmentManager();
+
+            //Fragment transaction.
+            fm.beginTransaction()
+                    .add(R.id.step_detail_frame_layout, stepDetailFragment)
+                    .commit();
+        } else {
+            mTwoPane = false;
+        }
     }
 
     /*
@@ -95,9 +103,18 @@ public class StepListActivity extends AppCompatActivity implements StepsListFrag
             Updating the fragment in the detail section for two pane mode.
             */
             StepDetailFragment stepDetailFragment = new StepDetailFragment();
+
+            //Sending the data to the fragment for setting into the containers.
+            Bundle arguments = new Bundle();
+            arguments.putParcelableArrayList(STEPS_KEY, stepsItemArrayList);
+            arguments.putInt(CLICKED_POSITION, position);
+            stepDetailFragment.setArguments(arguments);
+
+            //Replacing the current fragment with the updated one.
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.step_detail_frame_layout, stepDetailFragment)
                     .commit();
+
         } else {
             /*
             Opening the detail activity for single pane mode.

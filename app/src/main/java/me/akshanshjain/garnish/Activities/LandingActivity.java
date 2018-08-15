@@ -96,7 +96,6 @@ public class LandingActivity extends AppCompatActivity {
      */
     private void initViews() {
         QLight = Typeface.createFromAsset(getAssets(), "fonts/Quicksand-Light.ttf");
-        QMed = Typeface.createFromAsset(getAssets(), "fonts/Quicksand-Medium.ttf");
 
         parentLayout = findViewById(R.id.parent_landing);
 
