@@ -6,8 +6,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
+import me.akshanshjain.garnish.Fragments.StepDetailFragment;
 import me.akshanshjain.garnish.Fragments.StepsListFragment;
 import me.akshanshjain.garnish.Objects.StepsItem;
 import me.akshanshjain.garnish.R;
@@ -20,11 +25,36 @@ public class StepListActivity extends AppCompatActivity implements StepsListFrag
     private String recipeName;
 
     private static final String CLICKED_POSITION = "CLICKEDPOSITION";
+    private int clickedPosition;
+
+    private boolean mTwoPane;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_step_list);
+
+        if (findViewById(R.id.two_pane_linear_layout) != null) {
+            mTwoPane = true;
+            //Initiating the fragment to be added to the layout.
+            StepDetailFragment stepDetailFragment = new StepDetailFragment();
+
+            //Sending the data to the fragment for setting into the containers.
+            Bundle arguments = new Bundle();
+            arguments.putParcelableArrayList(STEPS_KEY, stepsItemArrayList);
+            arguments.putInt(CLICKED_POSITION, clickedPosition);
+            stepDetailFragment.setArguments(arguments);
+
+            //Using a fragment manager and transaction to add fragment to the screen.
+            FragmentManager fragmentManager = getSupportFragmentManager();
+
+            //Fragment transaction.
+            fragmentManager.beginTransaction()
+                    .add(R.id.step_detail_frame_layout, stepDetailFragment)
+                    .commit();
+        } else {
+            mTwoPane = false;
+        }
 
         //Setting up the toolbar for the activity.
         Toolbar toolbar = findViewById(R.id.toolbar_step_list);
@@ -60,10 +90,23 @@ public class StepListActivity extends AppCompatActivity implements StepsListFrag
     */
     @Override
     public void onStepItemClicked(int position) {
-        Intent detailedIntent = new Intent(getApplicationContext(), StepDetailsActivity.class);
-        detailedIntent.putExtra(CLICKED_POSITION, position);
-        detailedIntent.putParcelableArrayListExtra(STEPS_KEY, stepsItemArrayList);
-        startActivity(detailedIntent);
+        if (mTwoPane) {
+            /*
+            Updating the fragment in the detail section for two pane mode.
+            */
+            StepDetailFragment stepDetailFragment = new StepDetailFragment();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.step_detail_frame_layout, stepDetailFragment)
+                    .commit();
+        } else {
+            /*
+            Opening the detail activity for single pane mode.
+            */
+            Intent detailedIntent = new Intent(getApplicationContext(), StepDetailsActivity.class);
+            detailedIntent.putExtra(CLICKED_POSITION, position);
+            detailedIntent.putParcelableArrayListExtra(STEPS_KEY, stepsItemArrayList);
+            startActivity(detailedIntent);
+        }
     }
 }
 
