@@ -114,7 +114,6 @@ public class StepListActivity extends AppCompatActivity implements StepsListFrag
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.step_detail_frame_layout, stepDetailFragment)
                     .commit();
-
         } else {
             /*
             Opening the detail activity for single pane mode.
@@ -129,4 +128,5 @@ public class StepListActivity extends AppCompatActivity implements StepsListFrag
 
 /*
 This activity hosts the Steps List Fragment which is defined in the XML layout.
+Also supports two-pane layout for larger screens like tablets.
 */

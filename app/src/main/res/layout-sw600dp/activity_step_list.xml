@@ -3,23 +3,44 @@
     android:id="@+id/two_pane_linear_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal">
+    android:orientation="vertical">
 
-    <FrameLayout
-        android:id="@+id/steps_list_frame_layout"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="3" />
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <View
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:background="@color/chocolateBrown" />
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar_step_list"
+            android:layout_width="match_parent"
+            android:layout_height="?android:attr/actionBarSize"
+            android:theme="@style/ToolbarTheme" />
 
-    <FrameLayout
-        android:id="@+id/step_detail_frame_layout"
-        android:layout_width="0dp"
+    </android.support.design.widget.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="7" />
+        android:orientation="horizontal">
+
+        <FrameLayout
+            android:id="@+id/steps_list_frame_layout"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="4dp"
+            android:layout_marginStart="4dp"
+            android:background="@color/chocolateBrown" />
+
+        <FrameLayout
+            android:id="@+id/step_detail_frame_layout"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="7" />
+
+    </LinearLayout>
 
 </LinearLayout>
