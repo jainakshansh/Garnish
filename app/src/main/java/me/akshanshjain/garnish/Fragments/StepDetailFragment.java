@@ -9,10 +9,12 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -63,10 +65,15 @@ public class StepDetailFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_step_detail, container, false);
 
-        if (savedInstanceState != null & simpleExoPlayer != null) {
-            simpleExoPlayer.seekTo(savedInstanceState.getLong(PLAYER_POS));
-            simpleExoPlayer.setPlayWhenReady(savedInstanceState.getBoolean(PLAYER_STATE));
+        isPlayWhenReady = true;
+        /*
+        Retaining the player position and state saved before the  lifecycle change.
+        */
+        if (savedInstanceState != null) {
+            playerPosition = savedInstanceState.getLong(PLAYER_POS);
+            isPlayWhenReady = savedInstanceState.getBoolean(PLAYER_STATE);
         }
+
         /*
         Custom Typeface for all views with texts.
         */
@@ -99,6 +106,7 @@ public class StepDetailFragment extends Fragment {
         } else {
             Bitmap bitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.no_video);
             simpleExoPlayerView.setDefaultArtwork(bitmap);
+            Toast.makeText(getContext(), "Video not available!", Toast.LENGTH_SHORT).show();
         }
 
         //Returning the root view.
@@ -158,11 +166,15 @@ public class StepDetailFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        simpleExoPlayerView.setPlayer(null);
         if (simpleExoPlayer != null) {
             releasePlayer();
         }
     }
 
+    /*
+    Saving the current playing position and player state which can be retained after rotation or lifecycle changes.
+    */
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -170,5 +182,6 @@ public class StepDetailFragment extends Fragment {
         isPlayWhenReady = simpleExoPlayer.getPlayWhenReady();
         outState.putLong(PLAYER_POS, currentPos);
         outState.putBoolean(PLAYER_STATE, isPlayWhenReady);
+        Log.d("ADebug", "" + isPlayWhenReady);
     }
 }
