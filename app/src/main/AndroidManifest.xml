@@ -25,10 +25,12 @@
         <activity
             android:name=".Activities.StepListActivity"
             android:configChanges="orientation|screenSize"
+            android:launchMode="singleTop"
             android:parentActivityName=".Activities.RecipeDetailActivity" />
         <activity
             android:name=".Activities.StepDetailsActivity"
             android:configChanges="orientation|screenSize"
+            android:launchMode="singleTop"
             android:parentActivityName=".Activities.StepListActivity" />
 
         <receiver android:name=".Widget.GarnishRecipeWidget">
