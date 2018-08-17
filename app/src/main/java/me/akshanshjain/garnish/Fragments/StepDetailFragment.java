@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,6 +45,7 @@ public class StepDetailFragment extends Fragment {
     private ArrayList<StepsItem> stepsItemArrayList;
 
     private TextView description;
+    private ImageView thumbnail;
     private static final String STEPS_KEY = "STEPSINFO";
     private static final String CLICKED_POSITION = "CLICKEDPOSITION";
     private int clickedPosition;
@@ -52,6 +54,8 @@ public class StepDetailFragment extends Fragment {
     private boolean isPlayWhenReady;
     private static final String PLAYER_POS = "PLAYER_POS";
     private long playerPosition;
+
+    private Uri mediaUri;
 
     //Mandatory constructor for instantiating the fragment.
     public StepDetailFragment() {
@@ -66,6 +70,9 @@ public class StepDetailFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_step_detail, container, false);
 
         isPlayWhenReady = true;
+
+        //Referencing the imageview from the XML.
+        thumbnail = rootView.findViewById(R.id.thumbnail_iv_frag_step_det);
         /*
         Retaining the player position and state saved before the  lifecycle change.
         */
@@ -97,9 +104,17 @@ public class StepDetailFragment extends Fragment {
 
         //Setting the uri details into the player.
         if (stepsItemArrayList.get(clickedPosition).getVideoUrl() != null) {
-            initializePlayer(Uri.parse(stepsItemArrayList.get(clickedPosition).getVideoUrl()));
+            mediaUri = Uri.parse(stepsItemArrayList.get(clickedPosition).getVideoUrl());
+            initializePlayer(mediaUri);
         } else if (stepsItemArrayList.get(clickedPosition).getThumbnailUrl() != null) {
-            if (stepsItemArrayList.get(clickedPosition).getThumbnailUrl().endsWith("mp4")) {
+            if (!stepsItemArrayList.get(clickedPosition).getThumbnailUrl().endsWith("mp4")) {
+                //Setting the image into the image view below the video view.
+                simpleExoPlayerView.setVisibility(View.GONE);
+                Picasso.get()
+                        .load(stepsItemArrayList.get(clickedPosition).getThumbnailUrl())
+                        .into(thumbnail);
+                thumbnail.setVisibility(View.VISIBLE);
+            } else {
                 Bitmap bitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.no_video);
                 simpleExoPlayerView.setDefaultArtwork(bitmap);
             }
@@ -157,6 +172,12 @@ public class StepDetailFragment extends Fragment {
             simpleExoPlayer.setPlayWhenReady(false);
             releasePlayer();
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        initializePlayer(mediaUri);
     }
 
     /*

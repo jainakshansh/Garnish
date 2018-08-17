@@ -2,6 +2,7 @@ package me.akshanshjain.garnish.Fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -29,15 +30,23 @@ public class StepsListFragment extends Fragment implements StepsRecyclerAdapter.
     OnStepClickListener listener;
 
     private static final String STEPS_KEY = "STEPSINFO";
+    private static final String SCROLL_POS = "SCROLLPOS";
+    private int scrollPosition;
 
     //Mandatory constructor for instantiating a fragment.
     public StepsListFragment() {
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+    }
+
     /*
-    This makes sure that host activity has implemented the click interface.
-    If not, this throws an exception.
-    */
+        This makes sure that host activity has implemented the click interface.
+        If not, this throws an exception.
+        */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -97,5 +106,30 @@ public class StepsListFragment extends Fragment implements StepsRecyclerAdapter.
     */
     public interface OnStepClickListener {
         void onStepItemClicked(int position);
+    }
+
+
+    /*
+    Saving the scroll position as the instance state.
+    */
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        scrollPosition = (((LinearLayoutManager) stepsRecycler.getLayoutManager()).findFirstVisibleItemPosition());
+        outState.putInt(SCROLL_POS, scrollPosition);
+    }
+
+    /*
+    Getting the scroll position from the saved instance state.
+    */
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+
+        if (savedInstanceState != null && savedInstanceState.containsKey(SCROLL_POS)) {
+            scrollPosition = savedInstanceState.getInt(SCROLL_POS);
+            if (scrollPosition < 0) scrollPosition = 0;
+            stepsRecycler.scrollToPosition(scrollPosition);
+        }
     }
 }
