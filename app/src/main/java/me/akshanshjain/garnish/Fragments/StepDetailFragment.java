@@ -1,12 +1,14 @@
 package me.akshanshjain.garnish.Fragments;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,10 +26,10 @@ import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-import me.akshanshjain.garnish.Objects.RecipeItem;
 import me.akshanshjain.garnish.Objects.StepsItem;
 import me.akshanshjain.garnish.R;
 
@@ -44,6 +46,11 @@ public class StepDetailFragment extends Fragment {
     private static final String CLICKED_POSITION = "CLICKEDPOSITION";
     private int clickedPosition;
 
+    private static final String PLAYER_STATE = "PLAYER_STATE";
+    private boolean isPlayWhenReady;
+    private static final String PLAYER_POS = "PLAYER_POS";
+    private long playerPosition;
+
     //Mandatory constructor for instantiating the fragment.
     public StepDetailFragment() {
     }
@@ -56,6 +63,10 @@ public class StepDetailFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_step_detail, container, false);
 
+        if (savedInstanceState != null & simpleExoPlayer != null) {
+            simpleExoPlayer.seekTo(savedInstanceState.getLong(PLAYER_POS));
+            simpleExoPlayer.setPlayWhenReady(savedInstanceState.getBoolean(PLAYER_STATE));
+        }
         /*
         Custom Typeface for all views with texts.
         */
@@ -81,7 +92,13 @@ public class StepDetailFragment extends Fragment {
         if (stepsItemArrayList.get(clickedPosition).getVideoUrl() != null) {
             initializePlayer(Uri.parse(stepsItemArrayList.get(clickedPosition).getVideoUrl()));
         } else if (stepsItemArrayList.get(clickedPosition).getThumbnailUrl() != null) {
-            initializePlayer(Uri.parse(stepsItemArrayList.get(clickedPosition).getThumbnailUrl()));
+            if (stepsItemArrayList.get(clickedPosition).getThumbnailUrl().endsWith("mp4")) {
+                Bitmap bitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.no_video);
+                simpleExoPlayerView.setDefaultArtwork(bitmap);
+            }
+        } else {
+            Bitmap bitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.no_video);
+            simpleExoPlayerView.setDefaultArtwork(bitmap);
         }
 
         //Returning the root view.
@@ -106,8 +123,9 @@ public class StepDetailFragment extends Fragment {
             String userAgent = Util.getUserAgent(getContext(), "Garnish");
             MediaSource mediaSource = new ExtractorMediaSource(mediaUri, new DefaultDataSourceFactory(getContext(), userAgent),
                     new DefaultExtractorsFactory(), null, null);
+            simpleExoPlayer.seekTo(playerPosition);
+            simpleExoPlayer.setPlayWhenReady(isPlayWhenReady);
             simpleExoPlayer.prepare(mediaSource);
-            simpleExoPlayer.setPlayWhenReady(true);
         }
     }
 
@@ -121,11 +139,36 @@ public class StepDetailFragment extends Fragment {
     }
 
     /*
-    Releasing the player when the fragment is destroyed.
+    Stopping the working of the exoplayer when the UI screen is not visible.
     */
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        releasePlayer();
+    public void onStop() {
+        super.onStop();
+        simpleExoPlayerView.setPlayer(null);
+        if (simpleExoPlayer != null) {
+            simpleExoPlayer.setPlayWhenReady(false);
+            releasePlayer();
+        }
+    }
+
+    /*
+    Releasing the player when the fragment is destroyed.
+    */
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (simpleExoPlayer != null) {
+            releasePlayer();
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        long currentPos = simpleExoPlayer.getCurrentPosition();
+        isPlayWhenReady = simpleExoPlayer.getPlayWhenReady();
+        outState.putLong(PLAYER_POS, currentPos);
+        outState.putBoolean(PLAYER_STATE, isPlayWhenReady);
     }
 }
