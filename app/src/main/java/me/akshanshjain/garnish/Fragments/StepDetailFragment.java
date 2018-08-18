@@ -1,15 +1,11 @@
 package me.akshanshjain.garnish.Fragments;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,9 +58,15 @@ public class StepDetailFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        initializePlayer();
+    }
+
     /*
-        Inflates the fragment layout and carries out all the operations related to it.
-        */
+            Inflates the fragment layout and carries out all the operations related to it.
+            */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -94,36 +96,7 @@ public class StepDetailFragment extends Fragment {
         //Getting the thumbnail image view reference from the XML.
         thumbnail = rootView.findViewById(R.id.thumbnail_iv_step_det);
 
-        //Creating an instance of the ExoPlayer.
-        TrackSelector trackSelector = new DefaultTrackSelector();
-        LoadControl loadControl = new DefaultLoadControl();
-
-        simpleExoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector, loadControl);
-        simpleExoPlayerView.setPlayer(simpleExoPlayer);
-
-        String userAgent = Util.getUserAgent(getActivity(), "Garnish");
-        DefaultDataSourceFactory dataSourceFactory = new DefaultDataSourceFactory(getActivity(), userAgent);
-
-        Uri mediaUri = Uri.parse(stepsItemArrayList.get(clickedPosition).getVideoUrl());
-        if (mediaUri == null) {
-            Toast.makeText(getContext(), "Video not available!", Toast.LENGTH_SHORT).show();
-            thumbnail.setVisibility(View.VISIBLE);
-            if (stepsItemArrayList.get(clickedPosition).getThumbnailUrl() != null) {
-                Picasso.get()
-                        .load(stepsItemArrayList.get(clickedPosition).getThumbnailUrl())
-                        .into(thumbnail);
-            } else {
-                thumbnail.setImageResource(R.drawable.no_video);
-            }
-        }
-        MediaSource mediaSource = new ExtractorMediaSource(mediaUri, dataSourceFactory, new DefaultExtractorsFactory(), null, null);
-
-        /*
-        Initializing the Exo player.
-        Passing in the media uri sample to be played.
-        */
-        simpleExoPlayer.prepare(mediaSource);
-        simpleExoPlayer.setPlayWhenReady(true);
+        initializePlayer();
 
         /*
         Retaining the player position and state saved before the  lifecycle change.
@@ -135,6 +108,44 @@ public class StepDetailFragment extends Fragment {
 
         //Returning the root view.
         return rootView;
+    }
+
+    /*
+    Initializing the ExoPlayer.
+    */
+    private void initializePlayer() {
+        if (simpleExoPlayer == null) {
+            //Creating an instance of the ExoPlayer.
+            TrackSelector trackSelector = new DefaultTrackSelector();
+            LoadControl loadControl = new DefaultLoadControl();
+
+            simpleExoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector, loadControl);
+            simpleExoPlayerView.setPlayer(simpleExoPlayer);
+
+            String userAgent = Util.getUserAgent(getActivity(), "Garnish");
+            DefaultDataSourceFactory dataSourceFactory = new DefaultDataSourceFactory(getActivity(), userAgent);
+
+            Uri mediaUri = Uri.parse(stepsItemArrayList.get(clickedPosition).getVideoUrl());
+            if (mediaUri == null) {
+                Toast.makeText(getContext(), "Video not available!", Toast.LENGTH_SHORT).show();
+                thumbnail.setVisibility(View.VISIBLE);
+                if (stepsItemArrayList.get(clickedPosition).getThumbnailUrl() != null) {
+                    Picasso.get()
+                            .load(stepsItemArrayList.get(clickedPosition).getThumbnailUrl())
+                            .into(thumbnail);
+                } else {
+                    thumbnail.setImageResource(R.drawable.no_video);
+                }
+            }
+            MediaSource mediaSource = new ExtractorMediaSource(mediaUri, dataSourceFactory, new DefaultExtractorsFactory(), null, null);
+
+            /*
+            Initializing the Exo player.
+            Passing in the media uri sample to be played.
+            */
+            simpleExoPlayer.prepare(mediaSource);
+            simpleExoPlayer.setPlayWhenReady(true);
+        }
     }
 
     /*
@@ -154,6 +165,12 @@ public class StepDetailFragment extends Fragment {
         simpleExoPlayer.stop();
         simpleExoPlayer.release();
         simpleExoPlayer = null;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        initializePlayer();
     }
 
     /*
