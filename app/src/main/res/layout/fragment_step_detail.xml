@@ -17,6 +17,13 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <ImageView
+            android:id="@+id/thumbnail_iv_step_det"
+            android:layout_width="match_parent"
+            android:layout_height="320dp"
+            android:contentDescription="@string/show_recipe"
+            android:visibility="gone" />
+
         <TextView
             android:id="@+id/step_description_detail"
             android:layout_width="match_parent"

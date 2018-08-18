@@ -45,6 +45,7 @@ public class StepDetailFragment extends Fragment {
     private ArrayList<StepsItem> stepsItemArrayList;
 
     private TextView description;
+    private ImageView thumbnail;
     private static final String STEPS_KEY = "STEPSINFO";
     private static final String CLICKED_POSITION = "CLICKEDPOSITION";
     private int clickedPosition;
@@ -90,6 +91,9 @@ public class StepDetailFragment extends Fragment {
         description.setTypeface(QLight);
         description.setText(stepsItemArrayList.get(clickedPosition).getDescription());
 
+        //Getting the thumbnail image view reference from the XML.
+        thumbnail = rootView.findViewById(R.id.thumbnail_iv_step_det);
+
         //Creating an instance of the ExoPlayer.
         TrackSelector trackSelector = new DefaultTrackSelector();
         LoadControl loadControl = new DefaultLoadControl();
@@ -103,6 +107,14 @@ public class StepDetailFragment extends Fragment {
         Uri mediaUri = Uri.parse(stepsItemArrayList.get(clickedPosition).getVideoUrl());
         if (mediaUri == null) {
             Toast.makeText(getContext(), "Video not available!", Toast.LENGTH_SHORT).show();
+            thumbnail.setVisibility(View.VISIBLE);
+            if (stepsItemArrayList.get(clickedPosition).getThumbnailUrl() != null) {
+                Picasso.get()
+                        .load(stepsItemArrayList.get(clickedPosition).getThumbnailUrl())
+                        .into(thumbnail);
+            } else {
+                thumbnail.setImageResource(R.drawable.no_video);
+            }
         }
         MediaSource mediaSource = new ExtractorMediaSource(mediaUri, dataSourceFactory, new DefaultExtractorsFactory(), null, null);
 
