@@ -45,17 +45,12 @@ public class StepDetailFragment extends Fragment {
     private ArrayList<StepsItem> stepsItemArrayList;
 
     private TextView description;
-    private ImageView thumbnail;
     private static final String STEPS_KEY = "STEPSINFO";
     private static final String CLICKED_POSITION = "CLICKEDPOSITION";
     private int clickedPosition;
 
     private static final String PLAYER_STATE = "PLAYER_STATE";
-    private boolean isPlayWhenReady;
     private static final String PLAYER_POS = "PLAYER_POS";
-    private long playerPosition;
-
-    private Uri mediaUri;
 
     //Mandatory constructor for instantiating the fragment.
     public StepDetailFragment() {
@@ -64,7 +59,6 @@ public class StepDetailFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRetainInstance(true);
     }
 
     /*
@@ -74,18 +68,6 @@ public class StepDetailFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_step_detail, container, false);
-
-        isPlayWhenReady = true;
-
-        //Referencing the imageview from the XML.
-        thumbnail = rootView.findViewById(R.id.thumbnail_iv_frag_step_det);
-        /*
-        Retaining the player position and state saved before the  lifecycle change.
-        */
-        if (savedInstanceState != null) {
-            playerPosition = savedInstanceState.getLong(PLAYER_POS);
-            isPlayWhenReady = savedInstanceState.getBoolean(PLAYER_STATE);
-        }
 
         /*
         Custom Typeface for all views with texts.
@@ -108,26 +90,35 @@ public class StepDetailFragment extends Fragment {
         description.setTypeface(QLight);
         description.setText(stepsItemArrayList.get(clickedPosition).getDescription());
 
-        //Setting the uri details into the player.
-        if (stepsItemArrayList.get(clickedPosition).getVideoUrl() != null) {
-            mediaUri = Uri.parse(stepsItemArrayList.get(clickedPosition).getVideoUrl());
-            initializePlayer(mediaUri);
-        } else if (stepsItemArrayList.get(clickedPosition).getThumbnailUrl() != null) {
-            if (!stepsItemArrayList.get(clickedPosition).getThumbnailUrl().endsWith("mp4")) {
-                //Setting the image into the image view below the video view.
-                simpleExoPlayerView.setVisibility(View.GONE);
-                Picasso.get()
-                        .load(stepsItemArrayList.get(clickedPosition).getThumbnailUrl())
-                        .into(thumbnail);
-                thumbnail.setVisibility(View.VISIBLE);
-            } else {
-                Bitmap bitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.no_video);
-                simpleExoPlayerView.setDefaultArtwork(bitmap);
-            }
-        } else {
-            Bitmap bitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.no_video);
-            simpleExoPlayerView.setDefaultArtwork(bitmap);
+        //Creating an instance of the ExoPlayer.
+        TrackSelector trackSelector = new DefaultTrackSelector();
+        LoadControl loadControl = new DefaultLoadControl();
+
+        simpleExoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector, loadControl);
+        simpleExoPlayerView.setPlayer(simpleExoPlayer);
+
+        String userAgent = Util.getUserAgent(getActivity(), "Garnish");
+        DefaultDataSourceFactory dataSourceFactory = new DefaultDataSourceFactory(getActivity(), userAgent);
+
+        Uri mediaUri = Uri.parse(stepsItemArrayList.get(clickedPosition).getVideoUrl());
+        if (mediaUri == null) {
             Toast.makeText(getContext(), "Video not available!", Toast.LENGTH_SHORT).show();
+        }
+        MediaSource mediaSource = new ExtractorMediaSource(mediaUri, dataSourceFactory, new DefaultExtractorsFactory(), null, null);
+
+        /*
+        Initializing the Exo player.
+        Passing in the media uri sample to be played.
+        */
+        simpleExoPlayer.prepare(mediaSource);
+        simpleExoPlayer.setPlayWhenReady(true);
+
+        /*
+        Retaining the player position and state saved before the  lifecycle change.
+        */
+        if (savedInstanceState != null) {
+            simpleExoPlayer.seekTo(savedInstanceState.getLong(PLAYER_POS));
+            simpleExoPlayer.setPlayWhenReady(savedInstanceState.getBoolean(PLAYER_STATE));
         }
 
         //Returning the root view.
@@ -135,32 +126,18 @@ public class StepDetailFragment extends Fragment {
     }
 
     /*
-    Initializing the Exo player.
-    Passing in the media uri sample to be played.
+    Saving the current playing position and player state which can be retained after rotation or lifecycle changes.
     */
-    private void initializePlayer(Uri mediaUri) {
-        if (simpleExoPlayer == null) {
-
-            //Creating an instance of the ExoPlayer.
-            TrackSelector trackSelector = new DefaultTrackSelector();
-            LoadControl loadControl = new DefaultLoadControl();
-
-            simpleExoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector, loadControl);
-            simpleExoPlayerView.setPlayer(simpleExoPlayer);
-
-            //Preparing the MediaSource.
-            String userAgent = Util.getUserAgent(getContext(), "Garnish");
-            MediaSource mediaSource = new ExtractorMediaSource(mediaUri, new DefaultDataSourceFactory(getContext(), userAgent),
-                    new DefaultExtractorsFactory(), null, null);
-            simpleExoPlayer.seekTo(playerPosition);
-            simpleExoPlayer.setPlayWhenReady(isPlayWhenReady);
-            simpleExoPlayer.prepare(mediaSource);
-        }
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putLong(PLAYER_POS, simpleExoPlayer.getCurrentPosition());
+        outState.putBoolean(PLAYER_STATE, simpleExoPlayer.getPlayWhenReady());
     }
 
     /*
-    Code to release the Exo Player.
-    */
+   Code to release the Exo Player.
+   */
     private void releasePlayer() {
         simpleExoPlayer.stop();
         simpleExoPlayer.release();
@@ -180,35 +157,12 @@ public class StepDetailFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        initializePlayer(mediaUri);
-    }
-
     /*
     Releasing the player when the fragment is destroyed.
     */
-
     @Override
     public void onDestroy() {
         super.onDestroy();
         simpleExoPlayerView.setPlayer(null);
-        if (simpleExoPlayer != null) {
-            releasePlayer();
-        }
-    }
-
-    /*
-    Saving the current playing position and player state which can be retained after rotation or lifecycle changes.
-    */
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        long currentPos = simpleExoPlayer.getCurrentPosition();
-        isPlayWhenReady = simpleExoPlayer.getPlayWhenReady();
-        outState.putLong(PLAYER_POS, currentPos);
-        outState.putBoolean(PLAYER_STATE, isPlayWhenReady);
-        Log.d("ADebug", "" + isPlayWhenReady);
     }
 }
